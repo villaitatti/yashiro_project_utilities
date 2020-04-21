@@ -3,14 +3,15 @@ import os
 import re
 import random
 import string
+import requests
+import urllib
 
 from datetime import datetime
 from rdflib import Graph, URIRef, namespace, Namespace, Literal
 from bs4 import BeautifulSoup as bs
 
-# Yashiro (in Paris) to Mary Berenson
-# Yashiro to Bernard Berenson
-# Elizabeth Berenson (in Settignano) to Yashiro (in Palo Alto, California)
+username = 'admin'
+password = 'admin'
 
 key_date = 'created'
 key_title = 'title'
@@ -37,6 +38,8 @@ URI = {
     key_actors: {},
     key_places: {}
 }
+
+BASE_URI = 'http://yashiro.itatti.harvard.edu/'
 
 def _id_generator(stringLength=8):
 
@@ -85,8 +88,6 @@ def _write_letter_html(filename, content, directory):
 
 def _parse_title(title):
 
-    print(title)
-
     rex_places = r'\s\(+[^\(]+\)[\s]*'
     rex_parenthesis = r'[\(\)]'
     metadata = dict()
@@ -118,29 +119,31 @@ def _create_RDF(metadata):
     XSD = namespace.XSD
     RDFS = namespace.RDFS
 
+    base_uri = 'http://yashiro.itatti.harvard.edu/'
+
     CRM = Namespace('http://www.cidoc-crm.org/cidoc-crm/')
     CRM_NAME = 'crm'
 
-    DPUB_ANNOTATION = Namespace('http://dpub.cordh.net/annotation-schema/')
+    DPUB_ANNOTATION = Namespace(f'{base_uri}annotation-schema/')
     CRMDIG = Namespace('http://www.ics.forth.gr/isl/CRMdig/')
+
     LDP = Namespace('http://www.w3.org/ns/ldp#')
+    LDP_NAME = 'ldp'
 
     PROV = Namespace('http://www.w3.org/ns/prov#')
     PROV_NAME = 'prov'
 
-    BASE = Namespace('http://www.researchspace.org/resource/')
+    BASE = Namespace(f'{base_uri}resource/')
 
     PLATFORM = Namespace('http://www.metaphacts.com/ontologies/platform#')
     PLATFORM_NAME = 'Platform'
 
     USER = Namespace('http://www.metaphacts.com/resource/user/')
 
-    base_uri = 'http://yashiro.itatti.harvard.edu/'
-
-
     g.namespace_manager.bind(PLATFORM_NAME, PLATFORM, override = True, replace=True)
     g.namespace_manager.bind(PROV_NAME, PROV, override = True, replace=True)
     g.namespace_manager.bind(CRM_NAME, CRM, override = True, replace=True)
+    g.namespace_manager.bind(LDP_NAME, LDP, override=True, replace=True)
 
     # Main node
     base_node_uri = f'{base_uri}document/{metadata[key_filename]}'
@@ -155,7 +158,7 @@ def _create_RDF(metadata):
     g.add( (BASE_NODE, PLATFORM.fileContext, BASE.TextDocuments) )
     g.add( (BASE_NODE, PLATFORM.fileName, Literal(metadata[key_filename])) )
     g.add( (BASE_NODE, PLATFORM.mediaType, Literal('form-data')) )
-    g.add( (BASE_NODE, PROV.generatedAtTime, Literal('DATE_HERE', datatype=XSD.dateTime)) )
+    g.add( (BASE_NODE, PROV.generatedAtTime, Literal(metadata[key_sending_date], datatype=XSD.dateTime)) )
     g.add( (BASE_NODE, PROV.wasAttributedTo, USER.admin) )
 
     g.add( (PLATFORM.fileContainer , URIRef('http://www.w3.org/ns/ldp#contains'), BASE_NODE) )
@@ -353,4 +356,53 @@ def tag(input_metadata, directory):
 
         _write_RDF(f'{letter[key_filename]}.{extension_ttl}', data, directory)
 
-        return data
+    return extracted_metadata
+
+def _del(filename, url, f):
+
+    delete = requests.delete(
+        url,
+        headers = {'Content-Type':'text/turtle'},
+        auth = requests.auth.HTTPBasicAuth(username, password)
+    )
+    print(delete.raw)
+    return f'DEL\t{filename}\t{delete}'
+
+def _put(filename, url, f):
+
+    post = requests.put(
+        url = url, 
+        headers = {'Content-Type':'text/turtle'},
+        auth = requests.auth.HTTPBasicAuth(username, password),
+        data = f.read()) 
+
+    print(post.raw)
+    return f'PUT\t{filename}\t{post}'
+
+def post(directory, n=1):
+
+    i = 0
+
+    for metadata_file in os.listdir(directory):
+
+        if i == n:
+            return
+
+        with open(os.path.join(directory,metadata_file), 'rb') as f:
+
+            filename = metadata_file.split('.')[0]
+            url = f'http://127.0.0.1:10214/rdf-graph-store?graph=http://yashiro.itatti.harvard.edu/document/{filename}/context/'
+
+            print(url)
+
+            print('\n')
+
+            #DEL
+            print(_del(filename, url, f))
+
+            #PUT
+            print(_put(filename, url, f))
+
+            f.close()
+
+        i+=1

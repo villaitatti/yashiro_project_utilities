@@ -1,0 +1,68 @@
+@prefix Platform: <http://www.metaphacts.com/ontologies/platform#> .
+@prefix crm: <http://www.cidoc-crm.org/cidoc-crm/> .
+@prefix ldp: <http://www.w3.org/ns/ldp#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+Platform:fileContainer ldp:contains <http://yashiro.itatti.harvard.edu/document/Bernard_Berenson_in_Ischia_to_Yashiro_-575514000.html> .
+
+<http://yashiro.itatti.harvard.edu/resource/letter/W7Z9NYCN/exchange/GVM5FWK4/actor_as_receiver> crm:P02_has_range <http://yashiro.itatti.harvard.edu/resource/person/6VL7YHGM> ;
+    crm:P14.1_in_the_role_of <http://yashiro.itatti.harvard.edu/resource/role/receiver> .
+
+<http://yashiro.itatti.harvard.edu/resource/letter/W7Z9NYCN/exchange/GVM5FWK4/compilation/XAXM84MZ> a crm:E12_Production ;
+    rdfs:label "Compilation"^^xsd:string ;
+    crm:P01_has_domain <http://yashiro.itatti.harvard.edu/resource/letter/W7Z9NYCN/exchange/GVM5FWK4/actor_as_sender> ;
+    crm:P108_has_produced <http://yashiro.itatti.harvard.edu/resource/letter/W7Z9NYCN> ;
+    crm:P4_has_time_span <http://yashiro.itatti.harvard.edu/resource/letter/W7Z9NYCN/exchange/GVM5FWK4/sending/26LJHB9H/timespan/W2BUD36N> ;
+    crm:P7_took_place_at <http://yashiro.itatti.harvard.edu/resource/place/ZJ2RGV6F> ;
+    crm:P9i_forms_part_of <http://yashiro.itatti.harvard.edu/resource/letter/W7Z9NYCN/exchange/GVM5FWK4> .
+
+<http://yashiro.itatti.harvard.edu/resource/letter/W7Z9NYCN/exchange/GVM5FWK4/sending/26LJHB9H> a crm:E7_Activity ;
+    rdfs:label "Sending"^^xsd:string ;
+    crm:P16_used_specific_object <http://yashiro.itatti.harvard.edu/resource/letter/W7Z9NYCN> ;
+    crm:P4_has_time_span <http://yashiro.itatti.harvard.edu/resource/letter/W7Z9NYCN/exchange/GVM5FWK4/sending/26LJHB9H/timespan/W2BUD36N> ;
+    crm:P9i_forms_part_of <http://yashiro.itatti.harvard.edu/resource/letter/W7Z9NYCN/exchange/GVM5FWK4> .
+
+<http://yashiro.itatti.harvard.edu/document/Bernard_Berenson_in_Ischia_to_Yashiro_-575514000.html> a crm:E33_Linguistic_Object,
+        <http://www.ics.forth.gr/isl/CRMdig/D1_Digital_Object>,
+        Platform:File,
+        ldp:Resource,
+        prov:Entity,
+        <http://yashiro.itatti.harvard.edu/annotation-schema/TextDocument> ;
+    crm:P1_is_identified_by <http://yashiro.itatti.harvard.edu/resource/letter/W7Z9NYCN> ;
+    Platform:fileContext <http://yashiro.itatti.harvard.edu/resource/TextDocuments> ;
+    Platform:fileName "Bernard_Berenson_in_Ischia_to_Yashiro_-575514000.html" ;
+    Platform:mediaType "form-data" ;
+    prov:generatedAtTime "1951/10/07"^^xsd:dateTime ;
+    prov:wasAttributedTo <http://www.metaphacts.com/resource/user/admin> .
+
+<http://yashiro.itatti.harvard.edu/resource/letter/W7Z9NYCN/exchange/GVM5FWK4/actor_as_sender> crm:P02_has_range <http://yashiro.itatti.harvard.edu/resource/person/Y5Q7FJZY> ;
+    crm:P14.1_in_the_role_of <http://yashiro.itatti.harvard.edu/resource/role/sender> .
+
+<http://yashiro.itatti.harvard.edu/resource/person/6VL7YHGM> a crm:E21_Person ;
+    rdfs:label "Yashiro"^^xsd:string .
+
+<http://yashiro.itatti.harvard.edu/resource/person/Y5Q7FJZY> a crm:E21_Person ;
+    rdfs:label "Bernard Berenson"^^xsd:string .
+
+<http://yashiro.itatti.harvard.edu/resource/place/ZJ2RGV6F> a crm:E53_Place ;
+    rdfs:label "Ischia"^^xsd:string .
+
+<http://yashiro.itatti.harvard.edu/resource/role/receiver> a crm:E55_Type ;
+    rdfs:label "Receiver"^^xsd:string .
+
+<http://yashiro.itatti.harvard.edu/resource/role/sender> a crm:E55_Type ;
+    rdfs:label "Sender"^^xsd:string .
+
+<http://yashiro.itatti.harvard.edu/resource/letter/W7Z9NYCN/exchange/GVM5FWK4> a crm:E7_Activity ;
+    crm:P16_used_specific_object <http://yashiro.itatti.harvard.edu/resource/letter/W7Z9NYCN> .
+
+<http://yashiro.itatti.harvard.edu/resource/letter/W7Z9NYCN/exchange/GVM5FWK4/sending/26LJHB9H/timespan/W2BUD36N> a crm:E54_Time-span ;
+    crm:P81a_end_of_the_begin "-575514000"^^xsd:dateTime ;
+    crm:P81b_begin_of_the_end "-575514000"^^xsd:dateTime .
+
+<http://yashiro.itatti.harvard.edu/resource/letter/W7Z9NYCN> a crm:E22_Man-made_Object .
+
