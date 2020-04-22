@@ -7,62 +7,62 @@
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-Platform:fileContainer ldp:contains <http://yashiro.itatti.harvard.edu/document/Yashiro_in_Oiso_to_Bernard_Berenson_-421635600.html> .
+<dpub.cordh.net/resource/letter/J45Y2EH6/exchange/VHG25J84/actor_as_receiver> crm:P02_has_range <dpub.cordh.net/resource/person/9E64K6H8> ;
+    crm:P14.1_in_the_role_of <dpub.cordh.net/resource/role/receiver> .
 
-<http://yashiro.itatti.harvard.edu/resource/letter/WTS8R794/exchange/T3GXFF66/actor_as_receiver> crm:P02_has_range <http://yashiro.itatti.harvard.edu/resource/person/FVMFK7VZ> ;
-    crm:P14.1_in_the_role_of <http://yashiro.itatti.harvard.edu/resource/role/receiver> .
-
-<http://yashiro.itatti.harvard.edu/resource/letter/WTS8R794/exchange/T3GXFF66/compilation/U7ZMHJDJ> a crm:E12_Production ;
+<dpub.cordh.net/resource/letter/J45Y2EH6/exchange/VHG25J84/compilation/RSNHVHK8> a crm:E12_Production ;
     rdfs:label "Compilation"^^xsd:string ;
-    crm:P01_has_domain <http://yashiro.itatti.harvard.edu/resource/letter/WTS8R794/exchange/T3GXFF66/actor_as_sender> ;
-    crm:P108_has_produced <http://yashiro.itatti.harvard.edu/resource/letter/WTS8R794> ;
-    crm:P4_has_time_span <http://yashiro.itatti.harvard.edu/resource/letter/WTS8R794/exchange/T3GXFF66/sending/FLV69P42/timespan/EVBWFERA> ;
-    crm:P7_took_place_at <http://yashiro.itatti.harvard.edu/resource/place/NRHS74SV> ;
-    crm:P9i_forms_part_of <http://yashiro.itatti.harvard.edu/resource/letter/WTS8R794/exchange/T3GXFF66> .
+    crm:P01_has_domain <dpub.cordh.net/resource/letter/J45Y2EH6/exchange/VHG25J84/actor_as_sender> ;
+    crm:P108_has_produced <dpub.cordh.net/resource/letter/J45Y2EH6> ;
+    crm:P4_has_time_span <dpub.cordh.net/resource/letter/J45Y2EH6/exchange/VHG25J84/sending/V77SW22F/timespan/JVN7XD44> ;
+    crm:P7_took_place_at <dpub.cordh.net/resource/place/MJPEAEXA> ;
+    crm:P9i_forms_part_of <dpub.cordh.net/resource/letter/J45Y2EH6/exchange/VHG25J84> .
 
-<http://yashiro.itatti.harvard.edu/resource/letter/WTS8R794/exchange/T3GXFF66/sending/FLV69P42> a crm:E7_Activity ;
+<dpub.cordh.net/resource/letter/J45Y2EH6/exchange/VHG25J84/sending/V77SW22F> a crm:E7_Activity ;
     rdfs:label "Sending"^^xsd:string ;
-    crm:P16_used_specific_object <http://yashiro.itatti.harvard.edu/resource/letter/WTS8R794> ;
-    crm:P4_has_time_span <http://yashiro.itatti.harvard.edu/resource/letter/WTS8R794/exchange/T3GXFF66/sending/FLV69P42/timespan/EVBWFERA> ;
-    crm:P9i_forms_part_of <http://yashiro.itatti.harvard.edu/resource/letter/WTS8R794/exchange/T3GXFF66> .
+    crm:P16_used_specific_object <dpub.cordh.net/resource/letter/J45Y2EH6> ;
+    crm:P4_has_time_span <dpub.cordh.net/resource/letter/J45Y2EH6/exchange/VHG25J84/sending/V77SW22F/timespan/JVN7XD44> ;
+    crm:P9i_forms_part_of <dpub.cordh.net/resource/letter/J45Y2EH6/exchange/VHG25J84> .
 
-<http://yashiro.itatti.harvard.edu/document/Yashiro_in_Oiso_to_Bernard_Berenson_-421635600.html> a crm:E33_Linguistic_Object,
+Platform:fileContainer ldp:contains <dpub.cordh.net/document/Yashiro_in_Oiso_to_Bernard_Berenson_-421635600.html> .
+
+<dpub.cordh.net/document/Yashiro_in_Oiso_to_Bernard_Berenson_-421635600.html> a <dpub.cordh.net/annotation-schema/TextDocument>,
+        crm:E33_Linguistic_Object,
         <http://www.ics.forth.gr/isl/CRMdig/D1_Digital_Object>,
         Platform:File,
         ldp:Resource,
-        prov:Entity,
-        <http://yashiro.itatti.harvard.edu/annotation-schema/TextDocument> ;
-    crm:P1_is_identified_by <http://yashiro.itatti.harvard.edu/resource/letter/WTS8R794> ;
-    Platform:fileContext <http://yashiro.itatti.harvard.edu/resource/TextDocuments> ;
+        prov:Entity ;
+    crm:P1_is_identified_by <dpub.cordh.net/resource/letter/J45Y2EH6> ;
+    Platform:fileContext <dpub.cordh.net/resource/TextDocuments> ;
     Platform:fileName "Yashiro_in_Oiso_to_Bernard_Berenson_-421635600.html" ;
     Platform:mediaType "form-data" ;
     prov:generatedAtTime "1956/08/22"^^xsd:dateTime ;
     prov:wasAttributedTo <http://www.metaphacts.com/resource/user/admin> .
 
-<http://yashiro.itatti.harvard.edu/resource/letter/WTS8R794/exchange/T3GXFF66/actor_as_sender> crm:P02_has_range <http://yashiro.itatti.harvard.edu/resource/person/PA7XQQRE> ;
-    crm:P14.1_in_the_role_of <http://yashiro.itatti.harvard.edu/resource/role/sender> .
+<dpub.cordh.net/resource/letter/J45Y2EH6/exchange/VHG25J84/actor_as_sender> crm:P02_has_range <dpub.cordh.net/resource/person/45TCPQYV> ;
+    crm:P14.1_in_the_role_of <dpub.cordh.net/resource/role/sender> .
 
-<http://yashiro.itatti.harvard.edu/resource/person/FVMFK7VZ> a crm:E21_Person ;
-    rdfs:label "Bernard Berenson"^^xsd:string .
-
-<http://yashiro.itatti.harvard.edu/resource/person/PA7XQQRE> a crm:E21_Person ;
+<dpub.cordh.net/resource/person/45TCPQYV> a crm:E21_Person ;
     rdfs:label "Yashiro"^^xsd:string .
 
-<http://yashiro.itatti.harvard.edu/resource/place/NRHS74SV> a crm:E53_Place ;
+<dpub.cordh.net/resource/person/9E64K6H8> a crm:E21_Person ;
+    rdfs:label "Bernard Berenson"^^xsd:string .
+
+<dpub.cordh.net/resource/place/MJPEAEXA> a crm:E53_Place ;
     rdfs:label "Oiso"^^xsd:string .
 
-<http://yashiro.itatti.harvard.edu/resource/role/receiver> a crm:E55_Type ;
+<dpub.cordh.net/resource/role/receiver> a crm:E55_Type ;
     rdfs:label "Receiver"^^xsd:string .
 
-<http://yashiro.itatti.harvard.edu/resource/role/sender> a crm:E55_Type ;
+<dpub.cordh.net/resource/role/sender> a crm:E55_Type ;
     rdfs:label "Sender"^^xsd:string .
 
-<http://yashiro.itatti.harvard.edu/resource/letter/WTS8R794/exchange/T3GXFF66> a crm:E7_Activity ;
-    crm:P16_used_specific_object <http://yashiro.itatti.harvard.edu/resource/letter/WTS8R794> .
+<dpub.cordh.net/resource/letter/J45Y2EH6/exchange/VHG25J84> a crm:E7_Activity ;
+    crm:P16_used_specific_object <dpub.cordh.net/resource/letter/J45Y2EH6> .
 
-<http://yashiro.itatti.harvard.edu/resource/letter/WTS8R794/exchange/T3GXFF66/sending/FLV69P42/timespan/EVBWFERA> a crm:E54_Time-span ;
+<dpub.cordh.net/resource/letter/J45Y2EH6/exchange/VHG25J84/sending/V77SW22F/timespan/JVN7XD44> a crm:E54_Time-span ;
     crm:P81a_end_of_the_begin "-421635600"^^xsd:dateTime ;
     crm:P81b_begin_of_the_end "-421635600"^^xsd:dateTime .
 
-<http://yashiro.itatti.harvard.edu/resource/letter/WTS8R794> a crm:E22_Man-made_Object .
+<dpub.cordh.net/resource/letter/J45Y2EH6> a crm:E22_Man-made_Object .
 

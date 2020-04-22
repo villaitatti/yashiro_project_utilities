@@ -111,7 +111,7 @@ def _parse_date(date):
     # todo: timezone
     return datetime.fromtimestamp(date).strftime(date_format)
 
-def _create_RDF(metadata):
+def _create_RDF(base_uri, metadata):
 
     g = Graph()
 
@@ -119,12 +119,10 @@ def _create_RDF(metadata):
     XSD = namespace.XSD
     RDFS = namespace.RDFS
 
-    base_uri = 'http://yashiro.itatti.harvard.edu/'
-
     CRM = Namespace('http://www.cidoc-crm.org/cidoc-crm/')
     CRM_NAME = 'crm'
 
-    DPUB_ANNOTATION = Namespace(f'{base_uri}annotation-schema/')
+    DPUB_ANNOTATION = Namespace(f'{base_uri}/annotation-schema/')
     CRMDIG = Namespace('http://www.ics.forth.gr/isl/CRMdig/')
 
     LDP = Namespace('http://www.w3.org/ns/ldp#')
@@ -133,7 +131,7 @@ def _create_RDF(metadata):
     PROV = Namespace('http://www.w3.org/ns/prov#')
     PROV_NAME = 'prov'
 
-    BASE = Namespace(f'{base_uri}resource/')
+    BASE = Namespace(f'{base_uri}/resource/')
 
     PLATFORM = Namespace('http://www.metaphacts.com/ontologies/platform#')
     PLATFORM_NAME = 'Platform'
@@ -146,7 +144,7 @@ def _create_RDF(metadata):
     g.namespace_manager.bind(LDP_NAME, LDP, override=True, replace=True)
 
     # Main node
-    base_node_uri = f'{base_uri}document/{metadata[key_filename]}'
+    base_node_uri = f'{base_uri}/document/{metadata[key_filename]}'
     BASE_NODE = URIRef(base_node_uri)
 
     g.add( (BASE_NODE, RDF.type, CRM.E33_Linguistic_Object) )
@@ -163,7 +161,7 @@ def _create_RDF(metadata):
 
     g.add( (PLATFORM.fileContainer , URIRef('http://www.w3.org/ns/ldp#contains'), BASE_NODE) )
     
-    base_uri = f'{base_uri}resource/'
+    base_uri = f'{base_uri}/resource/'
     
     # Letter
     letter_id = _id_generator()
@@ -341,7 +339,7 @@ def extract(filename, directory):
 
     return extracted_data
 
-def tag(input_metadata, directory):
+def tag(uri, input_metadata, directory):
 
     extracted_metadata = []
 
@@ -352,7 +350,7 @@ def tag(input_metadata, directory):
 
         letter[key_sending_date] = _parse_date(letter[key_date])
 
-        data = _create_RDF(letter)
+        data = _create_RDF(uri, letter)
 
         _write_RDF(f'{letter[key_filename]}.{extension_ttl}', data, directory)
 
@@ -376,10 +374,10 @@ def _put(filename, url, f):
         auth = requests.auth.HTTPBasicAuth(username, password),
         data = f.read()) 
 
-    print(post.raw)
+    print(post)
     return f'PUT\t{filename}\t{post}'
 
-def post(directory, n=1):
+def post(uri, directory, n=1):
 
     i = 0
 
@@ -391,7 +389,8 @@ def post(directory, n=1):
         with open(os.path.join(directory,metadata_file), 'rb') as f:
 
             filename = metadata_file.split('.')[0]
-            url = f'http://127.0.0.1:10214/rdf-graph-store?graph=http://yashiro.itatti.harvard.edu/document/{filename}/context/'
+            graph_name = urllib.parse.quote(f'http://{uri}/document/{filename}/context', safe='')
+            url = f'http://127.0.0.1:10214/rdf-graph-store?graph={graph_name}'
 
             print(url)
 
