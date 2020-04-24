@@ -7,62 +7,60 @@
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-<dpub.cordh.net/resource/letter/GB9FRATY/exchange/88JGQRU6/actor_as_receiver> crm:P02_has_range <dpub.cordh.net/resource/person/JWB459HG> ;
-    crm:P14.1_in_the_role_of <dpub.cordh.net/resource/role/receiver> .
+<http://dpub.cordh.net/resource/letter/3XWQ4KUF/exchange/VAPBMBQ4/actor_as_receiver> crm:P02_has_range <http://dpub.cordh.net/resource/person/VSM8RJ6K> ;
+    crm:P14.1_in_the_role_of <http://dpub.cordh.net/resource/role/receiver> .
 
-<dpub.cordh.net/resource/letter/GB9FRATY/exchange/88JGQRU6/compilation/V6Y4EX9L> a crm:E12_Production ;
+<http://dpub.cordh.net/resource/letter/3XWQ4KUF/exchange/VAPBMBQ4/compilation/7TQC4HGK> a crm:E12_Production ;
     rdfs:label "Compilation"^^xsd:string ;
-    crm:P01_has_domain <dpub.cordh.net/resource/letter/GB9FRATY/exchange/88JGQRU6/actor_as_sender> ;
-    crm:P108_has_produced <dpub.cordh.net/resource/letter/GB9FRATY> ;
-    crm:P4_has_time_span <dpub.cordh.net/resource/letter/GB9FRATY/exchange/88JGQRU6/sending/3TDVU6W4/timespan/EYU8W4YM> ;
-    crm:P7_took_place_at <dpub.cordh.net/resource/place/ZQLERNRJ> ;
-    crm:P9i_forms_part_of <dpub.cordh.net/resource/letter/GB9FRATY/exchange/88JGQRU6> .
+    crm:P01_has_domain <http://dpub.cordh.net/resource/letter/3XWQ4KUF/exchange/VAPBMBQ4/actor_as_sender> ;
+    crm:P108_has_produced <http://dpub.cordh.net/resource/letter/3XWQ4KUF> ;
+    crm:P4_has_time_span <http://dpub.cordh.net/resource/letter/3XWQ4KUF/exchange/VAPBMBQ4/sending/ZE2GZYU5/timespan/VR637PTT> ;
+    crm:P7_took_place_at <http://dpub.cordh.net/resource/place/9NAVS65J> ;
+    crm:P9i_forms_part_of <http://dpub.cordh.net/resource/letter/3XWQ4KUF/exchange/VAPBMBQ4> .
 
-<dpub.cordh.net/resource/letter/GB9FRATY/exchange/88JGQRU6/sending/3TDVU6W4> a crm:E7_Activity ;
+<http://dpub.cordh.net/resource/letter/3XWQ4KUF/exchange/VAPBMBQ4/sending/ZE2GZYU5> a crm:E7_Activity ;
     rdfs:label "Sending"^^xsd:string ;
-    crm:P16_used_specific_object <dpub.cordh.net/resource/letter/GB9FRATY> ;
-    crm:P4_has_time_span <dpub.cordh.net/resource/letter/GB9FRATY/exchange/88JGQRU6/sending/3TDVU6W4/timespan/EYU8W4YM> ;
-    crm:P9i_forms_part_of <dpub.cordh.net/resource/letter/GB9FRATY/exchange/88JGQRU6> .
+    crm:P16_used_specific_object <http://dpub.cordh.net/resource/letter/3XWQ4KUF> ;
+    crm:P4_has_time_span <http://dpub.cordh.net/resource/letter/3XWQ4KUF/exchange/VAPBMBQ4/sending/ZE2GZYU5/timespan/VR637PTT> ;
+    crm:P9i_forms_part_of <http://dpub.cordh.net/resource/letter/3XWQ4KUF/exchange/VAPBMBQ4> .
 
-Platform:fileContainer ldp:contains <dpub.cordh.net/document/Nicky_Mariano_in_Settignano_to_Yashiro_-343184400.html> .
+Platform:fileContainer ldp:contains <http://dpub.cordh.net/document/Nicky_Mariano_in_Settignano_to_Yashiro_-343184400.html> .
 
-<dpub.cordh.net/document/Nicky_Mariano_in_Settignano_to_Yashiro_-343184400.html> a <dpub.cordh.net/annotation-schema/TextDocument>,
+<http://dpub.cordh.net/document/Nicky_Mariano_in_Settignano_to_Yashiro_-343184400.html> a <http://dpub.cordh.net/annotation-schema/TextDocument>,
         crm:E33_Linguistic_Object,
         <http://www.ics.forth.gr/isl/CRMdig/D1_Digital_Object>,
         Platform:File,
         ldp:Resource,
         prov:Entity ;
-    crm:P1_is_identified_by <dpub.cordh.net/resource/letter/GB9FRATY> ;
-    Platform:fileContext <dpub.cordh.net/resource/TextDocuments> ;
+    crm:P1_is_identified_by <http://dpub.cordh.net/resource/letter/3XWQ4KUF> ;
+    Platform:fileContext <http://www.researchspace.org/resource/TextDocuments> ;
     Platform:fileName "Nicky_Mariano_in_Settignano_to_Yashiro_-343184400.html" ;
     Platform:mediaType "form-data" ;
-    prov:generatedAtTime "1959/02/16"^^xsd:dateTime ;
-    prov:wasAttributedTo <http://www.metaphacts.com/resource/user/admin> .
+    prov:generatedAtTime "2020-01-01T16:33:02"^^xsd:dateTime ;
+    prov:wasAttributedTo <http://www.researchspace.org/resource/user/admin> .
 
-<dpub.cordh.net/resource/letter/GB9FRATY/exchange/88JGQRU6/actor_as_sender> crm:P02_has_range <dpub.cordh.net/resource/person/XY3LJZ4F> ;
-    crm:P14.1_in_the_role_of <dpub.cordh.net/resource/role/sender> .
+<http://dpub.cordh.net/resource/letter/3XWQ4KUF/exchange/VAPBMBQ4/actor_as_sender> crm:P02_has_range <http://dpub.cordh.net/resource/person/WFLHG5FQ> ;
+    crm:P14.1_in_the_role_of <http://dpub.cordh.net/resource/role/sender> .
 
-<dpub.cordh.net/resource/person/JWB459HG> a crm:E21_Person ;
+<http://dpub.cordh.net/resource/person/VSM8RJ6K> a crm:E21_Person ;
     rdfs:label "Yashiro"^^xsd:string .
 
-<dpub.cordh.net/resource/person/XY3LJZ4F> a crm:E21_Person ;
+<http://dpub.cordh.net/resource/person/WFLHG5FQ> a crm:E21_Person ;
     rdfs:label "Nicky Mariano"^^xsd:string .
 
-<dpub.cordh.net/resource/place/ZQLERNRJ> a crm:E53_Place ;
+<http://dpub.cordh.net/resource/place/9NAVS65J> a crm:E53_Place ;
     rdfs:label "Settignano"^^xsd:string .
 
-<dpub.cordh.net/resource/role/receiver> a crm:E55_Type ;
+<http://dpub.cordh.net/resource/role/receiver> a crm:E55_Type ;
     rdfs:label "Receiver"^^xsd:string .
 
-<dpub.cordh.net/resource/role/sender> a crm:E55_Type ;
+<http://dpub.cordh.net/resource/role/sender> a crm:E55_Type ;
     rdfs:label "Sender"^^xsd:string .
 
-<dpub.cordh.net/resource/letter/GB9FRATY/exchange/88JGQRU6> a crm:E7_Activity ;
-    crm:P16_used_specific_object <dpub.cordh.net/resource/letter/GB9FRATY> .
+<http://dpub.cordh.net/resource/letter/3XWQ4KUF/exchange/VAPBMBQ4> a crm:E7_Activity ;
+    crm:P16_used_specific_object <http://dpub.cordh.net/resource/letter/3XWQ4KUF> .
 
-<dpub.cordh.net/resource/letter/GB9FRATY/exchange/88JGQRU6/sending/3TDVU6W4/timespan/EYU8W4YM> a crm:E54_Time-span ;
-    crm:P81a_end_of_the_begin "-343184400"^^xsd:dateTime ;
-    crm:P81b_begin_of_the_end "-343184400"^^xsd:dateTime .
+<http://dpub.cordh.net/resource/letter/3XWQ4KUF/exchange/VAPBMBQ4/sending/ZE2GZYU5/timespan/VR637PTT> a crm:E54_Time-span .
 
-<dpub.cordh.net/resource/letter/GB9FRATY> a crm:E22_Man-made_Object .
+<http://dpub.cordh.net/resource/letter/3XWQ4KUF> a crm:E22_Man-made_Object .
 

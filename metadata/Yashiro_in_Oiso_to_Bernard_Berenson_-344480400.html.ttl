@@ -7,62 +7,60 @@
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-<dpub.cordh.net/resource/letter/PJ2LSPW7/exchange/4HKNZ4YU/actor_as_receiver> crm:P02_has_range <dpub.cordh.net/resource/person/YBYMSAN8> ;
-    crm:P14.1_in_the_role_of <dpub.cordh.net/resource/role/receiver> .
+<http://dpub.cordh.net/resource/letter/LL5YWSU6/exchange/AP3J7G7Q/actor_as_receiver> crm:P02_has_range <http://dpub.cordh.net/resource/person/PF7CNDMU> ;
+    crm:P14.1_in_the_role_of <http://dpub.cordh.net/resource/role/receiver> .
 
-<dpub.cordh.net/resource/letter/PJ2LSPW7/exchange/4HKNZ4YU/compilation/3KC5CFA3> a crm:E12_Production ;
+<http://dpub.cordh.net/resource/letter/LL5YWSU6/exchange/AP3J7G7Q/compilation/ZWJYUBTD> a crm:E12_Production ;
     rdfs:label "Compilation"^^xsd:string ;
-    crm:P01_has_domain <dpub.cordh.net/resource/letter/PJ2LSPW7/exchange/4HKNZ4YU/actor_as_sender> ;
-    crm:P108_has_produced <dpub.cordh.net/resource/letter/PJ2LSPW7> ;
-    crm:P4_has_time_span <dpub.cordh.net/resource/letter/PJ2LSPW7/exchange/4HKNZ4YU/sending/C7DU3MZ6/timespan/D7W456KH> ;
-    crm:P7_took_place_at <dpub.cordh.net/resource/place/QFKQ6WYM> ;
-    crm:P9i_forms_part_of <dpub.cordh.net/resource/letter/PJ2LSPW7/exchange/4HKNZ4YU> .
+    crm:P01_has_domain <http://dpub.cordh.net/resource/letter/LL5YWSU6/exchange/AP3J7G7Q/actor_as_sender> ;
+    crm:P108_has_produced <http://dpub.cordh.net/resource/letter/LL5YWSU6> ;
+    crm:P4_has_time_span <http://dpub.cordh.net/resource/letter/LL5YWSU6/exchange/AP3J7G7Q/sending/EU6HGDC4/timespan/2EL2J4GH> ;
+    crm:P7_took_place_at <http://dpub.cordh.net/resource/place/7ZFFQ6G9> ;
+    crm:P9i_forms_part_of <http://dpub.cordh.net/resource/letter/LL5YWSU6/exchange/AP3J7G7Q> .
 
-<dpub.cordh.net/resource/letter/PJ2LSPW7/exchange/4HKNZ4YU/sending/C7DU3MZ6> a crm:E7_Activity ;
+<http://dpub.cordh.net/resource/letter/LL5YWSU6/exchange/AP3J7G7Q/sending/EU6HGDC4> a crm:E7_Activity ;
     rdfs:label "Sending"^^xsd:string ;
-    crm:P16_used_specific_object <dpub.cordh.net/resource/letter/PJ2LSPW7> ;
-    crm:P4_has_time_span <dpub.cordh.net/resource/letter/PJ2LSPW7/exchange/4HKNZ4YU/sending/C7DU3MZ6/timespan/D7W456KH> ;
-    crm:P9i_forms_part_of <dpub.cordh.net/resource/letter/PJ2LSPW7/exchange/4HKNZ4YU> .
+    crm:P16_used_specific_object <http://dpub.cordh.net/resource/letter/LL5YWSU6> ;
+    crm:P4_has_time_span <http://dpub.cordh.net/resource/letter/LL5YWSU6/exchange/AP3J7G7Q/sending/EU6HGDC4/timespan/2EL2J4GH> ;
+    crm:P9i_forms_part_of <http://dpub.cordh.net/resource/letter/LL5YWSU6/exchange/AP3J7G7Q> .
 
-Platform:fileContainer ldp:contains <dpub.cordh.net/document/Yashiro_in_Oiso_to_Bernard_Berenson_-344480400.html> .
+Platform:fileContainer ldp:contains <http://dpub.cordh.net/document/Yashiro_in_Oiso_to_Bernard_Berenson_-344480400.html> .
 
-<dpub.cordh.net/document/Yashiro_in_Oiso_to_Bernard_Berenson_-344480400.html> a <dpub.cordh.net/annotation-schema/TextDocument>,
+<http://dpub.cordh.net/document/Yashiro_in_Oiso_to_Bernard_Berenson_-344480400.html> a <http://dpub.cordh.net/annotation-schema/TextDocument>,
         crm:E33_Linguistic_Object,
         <http://www.ics.forth.gr/isl/CRMdig/D1_Digital_Object>,
         Platform:File,
         ldp:Resource,
         prov:Entity ;
-    crm:P1_is_identified_by <dpub.cordh.net/resource/letter/PJ2LSPW7> ;
-    Platform:fileContext <dpub.cordh.net/resource/TextDocuments> ;
+    crm:P1_is_identified_by <http://dpub.cordh.net/resource/letter/LL5YWSU6> ;
+    Platform:fileContext <http://www.researchspace.org/resource/TextDocuments> ;
     Platform:fileName "Yashiro_in_Oiso_to_Bernard_Berenson_-344480400.html" ;
     Platform:mediaType "form-data" ;
-    prov:generatedAtTime "1959/02/01"^^xsd:dateTime ;
-    prov:wasAttributedTo <http://www.metaphacts.com/resource/user/admin> .
+    prov:generatedAtTime "2020-01-01T16:33:02"^^xsd:dateTime ;
+    prov:wasAttributedTo <http://www.researchspace.org/resource/user/admin> .
 
-<dpub.cordh.net/resource/letter/PJ2LSPW7/exchange/4HKNZ4YU/actor_as_sender> crm:P02_has_range <dpub.cordh.net/resource/person/W373P9AD> ;
-    crm:P14.1_in_the_role_of <dpub.cordh.net/resource/role/sender> .
+<http://dpub.cordh.net/resource/letter/LL5YWSU6/exchange/AP3J7G7Q/actor_as_sender> crm:P02_has_range <http://dpub.cordh.net/resource/person/5PJ64PSK> ;
+    crm:P14.1_in_the_role_of <http://dpub.cordh.net/resource/role/sender> .
 
-<dpub.cordh.net/resource/person/W373P9AD> a crm:E21_Person ;
+<http://dpub.cordh.net/resource/person/5PJ64PSK> a crm:E21_Person ;
     rdfs:label "Yashiro"^^xsd:string .
 
-<dpub.cordh.net/resource/person/YBYMSAN8> a crm:E21_Person ;
+<http://dpub.cordh.net/resource/person/PF7CNDMU> a crm:E21_Person ;
     rdfs:label "Bernard Berenson"^^xsd:string .
 
-<dpub.cordh.net/resource/place/QFKQ6WYM> a crm:E53_Place ;
+<http://dpub.cordh.net/resource/place/7ZFFQ6G9> a crm:E53_Place ;
     rdfs:label "Oiso"^^xsd:string .
 
-<dpub.cordh.net/resource/role/receiver> a crm:E55_Type ;
+<http://dpub.cordh.net/resource/role/receiver> a crm:E55_Type ;
     rdfs:label "Receiver"^^xsd:string .
 
-<dpub.cordh.net/resource/role/sender> a crm:E55_Type ;
+<http://dpub.cordh.net/resource/role/sender> a crm:E55_Type ;
     rdfs:label "Sender"^^xsd:string .
 
-<dpub.cordh.net/resource/letter/PJ2LSPW7/exchange/4HKNZ4YU> a crm:E7_Activity ;
-    crm:P16_used_specific_object <dpub.cordh.net/resource/letter/PJ2LSPW7> .
+<http://dpub.cordh.net/resource/letter/LL5YWSU6/exchange/AP3J7G7Q> a crm:E7_Activity ;
+    crm:P16_used_specific_object <http://dpub.cordh.net/resource/letter/LL5YWSU6> .
 
-<dpub.cordh.net/resource/letter/PJ2LSPW7/exchange/4HKNZ4YU/sending/C7DU3MZ6/timespan/D7W456KH> a crm:E54_Time-span ;
-    crm:P81a_end_of_the_begin "-344480400"^^xsd:dateTime ;
-    crm:P81b_begin_of_the_end "-344480400"^^xsd:dateTime .
+<http://dpub.cordh.net/resource/letter/LL5YWSU6/exchange/AP3J7G7Q/sending/EU6HGDC4/timespan/2EL2J4GH> a crm:E54_Time-span .
 
-<dpub.cordh.net/resource/letter/PJ2LSPW7> a crm:E22_Man-made_Object .
+<http://dpub.cordh.net/resource/letter/LL5YWSU6> a crm:E22_Man-made_Object .
 

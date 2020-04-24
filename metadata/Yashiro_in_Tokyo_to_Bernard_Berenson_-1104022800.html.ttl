@@ -7,62 +7,60 @@
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-<dpub.cordh.net/resource/letter/HQD8HQ8P/exchange/G8THBM2W/actor_as_receiver> crm:P02_has_range <dpub.cordh.net/resource/person/K33YXNB6> ;
-    crm:P14.1_in_the_role_of <dpub.cordh.net/resource/role/receiver> .
+<http://dpub.cordh.net/resource/letter/C6N3U6B2/exchange/7AL44WKL/actor_as_receiver> crm:P02_has_range <http://dpub.cordh.net/resource/person/ZHQA7QE4> ;
+    crm:P14.1_in_the_role_of <http://dpub.cordh.net/resource/role/receiver> .
 
-<dpub.cordh.net/resource/letter/HQD8HQ8P/exchange/G8THBM2W/compilation/G56RCVLS> a crm:E12_Production ;
+<http://dpub.cordh.net/resource/letter/C6N3U6B2/exchange/7AL44WKL/compilation/XCQRG24T> a crm:E12_Production ;
     rdfs:label "Compilation"^^xsd:string ;
-    crm:P01_has_domain <dpub.cordh.net/resource/letter/HQD8HQ8P/exchange/G8THBM2W/actor_as_sender> ;
-    crm:P108_has_produced <dpub.cordh.net/resource/letter/HQD8HQ8P> ;
-    crm:P4_has_time_span <dpub.cordh.net/resource/letter/HQD8HQ8P/exchange/G8THBM2W/sending/XGXF69HJ/timespan/8FK3RT22> ;
-    crm:P7_took_place_at <dpub.cordh.net/resource/place/ECNRZT2R> ;
-    crm:P9i_forms_part_of <dpub.cordh.net/resource/letter/HQD8HQ8P/exchange/G8THBM2W> .
+    crm:P01_has_domain <http://dpub.cordh.net/resource/letter/C6N3U6B2/exchange/7AL44WKL/actor_as_sender> ;
+    crm:P108_has_produced <http://dpub.cordh.net/resource/letter/C6N3U6B2> ;
+    crm:P4_has_time_span <http://dpub.cordh.net/resource/letter/C6N3U6B2/exchange/7AL44WKL/sending/4885DGXP/timespan/XU8MYGZJ> ;
+    crm:P7_took_place_at <http://dpub.cordh.net/resource/place/YN3YPZE2> ;
+    crm:P9i_forms_part_of <http://dpub.cordh.net/resource/letter/C6N3U6B2/exchange/7AL44WKL> .
 
-<dpub.cordh.net/resource/letter/HQD8HQ8P/exchange/G8THBM2W/sending/XGXF69HJ> a crm:E7_Activity ;
+<http://dpub.cordh.net/resource/letter/C6N3U6B2/exchange/7AL44WKL/sending/4885DGXP> a crm:E7_Activity ;
     rdfs:label "Sending"^^xsd:string ;
-    crm:P16_used_specific_object <dpub.cordh.net/resource/letter/HQD8HQ8P> ;
-    crm:P4_has_time_span <dpub.cordh.net/resource/letter/HQD8HQ8P/exchange/G8THBM2W/sending/XGXF69HJ/timespan/8FK3RT22> ;
-    crm:P9i_forms_part_of <dpub.cordh.net/resource/letter/HQD8HQ8P/exchange/G8THBM2W> .
+    crm:P16_used_specific_object <http://dpub.cordh.net/resource/letter/C6N3U6B2> ;
+    crm:P4_has_time_span <http://dpub.cordh.net/resource/letter/C6N3U6B2/exchange/7AL44WKL/sending/4885DGXP/timespan/XU8MYGZJ> ;
+    crm:P9i_forms_part_of <http://dpub.cordh.net/resource/letter/C6N3U6B2/exchange/7AL44WKL> .
 
-Platform:fileContainer ldp:contains <dpub.cordh.net/document/Yashiro_in_Tokyo_to_Bernard_Berenson_-1104022800.html> .
+Platform:fileContainer ldp:contains <http://dpub.cordh.net/document/Yashiro_in_Tokyo_to_Bernard_Berenson_-1104022800.html> .
 
-<dpub.cordh.net/document/Yashiro_in_Tokyo_to_Bernard_Berenson_-1104022800.html> a <dpub.cordh.net/annotation-schema/TextDocument>,
+<http://dpub.cordh.net/document/Yashiro_in_Tokyo_to_Bernard_Berenson_-1104022800.html> a <http://dpub.cordh.net/annotation-schema/TextDocument>,
         crm:E33_Linguistic_Object,
         <http://www.ics.forth.gr/isl/CRMdig/D1_Digital_Object>,
         Platform:File,
         ldp:Resource,
         prov:Entity ;
-    crm:P1_is_identified_by <dpub.cordh.net/resource/letter/HQD8HQ8P> ;
-    Platform:fileContext <dpub.cordh.net/resource/TextDocuments> ;
+    crm:P1_is_identified_by <http://dpub.cordh.net/resource/letter/C6N3U6B2> ;
+    Platform:fileContext <http://www.researchspace.org/resource/TextDocuments> ;
     Platform:fileName "Yashiro_in_Tokyo_to_Bernard_Berenson_-1104022800.html" ;
     Platform:mediaType "form-data" ;
-    prov:generatedAtTime "1935/01/07"^^xsd:dateTime ;
-    prov:wasAttributedTo <http://www.metaphacts.com/resource/user/admin> .
+    prov:generatedAtTime "2020-01-01T16:33:02"^^xsd:dateTime ;
+    prov:wasAttributedTo <http://www.researchspace.org/resource/user/admin> .
 
-<dpub.cordh.net/resource/letter/HQD8HQ8P/exchange/G8THBM2W/actor_as_sender> crm:P02_has_range <dpub.cordh.net/resource/person/DDK3NSMR> ;
-    crm:P14.1_in_the_role_of <dpub.cordh.net/resource/role/sender> .
+<http://dpub.cordh.net/resource/letter/C6N3U6B2/exchange/7AL44WKL/actor_as_sender> crm:P02_has_range <http://dpub.cordh.net/resource/person/KP7U9H5L> ;
+    crm:P14.1_in_the_role_of <http://dpub.cordh.net/resource/role/sender> .
 
-<dpub.cordh.net/resource/person/DDK3NSMR> a crm:E21_Person ;
+<http://dpub.cordh.net/resource/person/KP7U9H5L> a crm:E21_Person ;
     rdfs:label "Yashiro"^^xsd:string .
 
-<dpub.cordh.net/resource/person/K33YXNB6> a crm:E21_Person ;
+<http://dpub.cordh.net/resource/person/ZHQA7QE4> a crm:E21_Person ;
     rdfs:label "Bernard Berenson"^^xsd:string .
 
-<dpub.cordh.net/resource/place/ECNRZT2R> a crm:E53_Place ;
+<http://dpub.cordh.net/resource/place/YN3YPZE2> a crm:E53_Place ;
     rdfs:label "Tokyo"^^xsd:string .
 
-<dpub.cordh.net/resource/role/receiver> a crm:E55_Type ;
+<http://dpub.cordh.net/resource/role/receiver> a crm:E55_Type ;
     rdfs:label "Receiver"^^xsd:string .
 
-<dpub.cordh.net/resource/role/sender> a crm:E55_Type ;
+<http://dpub.cordh.net/resource/role/sender> a crm:E55_Type ;
     rdfs:label "Sender"^^xsd:string .
 
-<dpub.cordh.net/resource/letter/HQD8HQ8P/exchange/G8THBM2W> a crm:E7_Activity ;
-    crm:P16_used_specific_object <dpub.cordh.net/resource/letter/HQD8HQ8P> .
+<http://dpub.cordh.net/resource/letter/C6N3U6B2/exchange/7AL44WKL> a crm:E7_Activity ;
+    crm:P16_used_specific_object <http://dpub.cordh.net/resource/letter/C6N3U6B2> .
 
-<dpub.cordh.net/resource/letter/HQD8HQ8P/exchange/G8THBM2W/sending/XGXF69HJ/timespan/8FK3RT22> a crm:E54_Time-span ;
-    crm:P81a_end_of_the_begin "-1104022800"^^xsd:dateTime ;
-    crm:P81b_begin_of_the_end "-1104022800"^^xsd:dateTime .
+<http://dpub.cordh.net/resource/letter/C6N3U6B2/exchange/7AL44WKL/sending/4885DGXP/timespan/XU8MYGZJ> a crm:E54_Time-span .
 
-<dpub.cordh.net/resource/letter/HQD8HQ8P> a crm:E22_Man-made_Object .
+<http://dpub.cordh.net/resource/letter/C6N3U6B2> a crm:E22_Man-made_Object .
 

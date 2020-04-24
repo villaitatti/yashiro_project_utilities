@@ -7,62 +7,60 @@
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-<dpub.cordh.net/resource/letter/KYVMPFLS/exchange/KN3GRKXF/actor_as_receiver> crm:P02_has_range <dpub.cordh.net/resource/person/6MRLE935> ;
-    crm:P14.1_in_the_role_of <dpub.cordh.net/resource/role/receiver> .
+<http://dpub.cordh.net/resource/letter/8ESY2ZWK/exchange/SM76Z58G/actor_as_receiver> crm:P02_has_range <http://dpub.cordh.net/resource/person/NEJFH4KY> ;
+    crm:P14.1_in_the_role_of <http://dpub.cordh.net/resource/role/receiver> .
 
-<dpub.cordh.net/resource/letter/KYVMPFLS/exchange/KN3GRKXF/compilation/BFU77V2C> a crm:E12_Production ;
+<http://dpub.cordh.net/resource/letter/8ESY2ZWK/exchange/SM76Z58G/compilation/VNUPLK4Q> a crm:E12_Production ;
     rdfs:label "Compilation"^^xsd:string ;
-    crm:P01_has_domain <dpub.cordh.net/resource/letter/KYVMPFLS/exchange/KN3GRKXF/actor_as_sender> ;
-    crm:P108_has_produced <dpub.cordh.net/resource/letter/KYVMPFLS> ;
-    crm:P4_has_time_span <dpub.cordh.net/resource/letter/KYVMPFLS/exchange/KN3GRKXF/sending/NT2JTQVC/timespan/AYECYTPK> ;
-    crm:P7_took_place_at <dpub.cordh.net/resource/place/4UPSFXUA> ;
-    crm:P9i_forms_part_of <dpub.cordh.net/resource/letter/KYVMPFLS/exchange/KN3GRKXF> .
+    crm:P01_has_domain <http://dpub.cordh.net/resource/letter/8ESY2ZWK/exchange/SM76Z58G/actor_as_sender> ;
+    crm:P108_has_produced <http://dpub.cordh.net/resource/letter/8ESY2ZWK> ;
+    crm:P4_has_time_span <http://dpub.cordh.net/resource/letter/8ESY2ZWK/exchange/SM76Z58G/sending/9PHK6X5N/timespan/S3MZUK2Z> ;
+    crm:P7_took_place_at <http://dpub.cordh.net/resource/place/ZN3XGAR3> ;
+    crm:P9i_forms_part_of <http://dpub.cordh.net/resource/letter/8ESY2ZWK/exchange/SM76Z58G> .
 
-<dpub.cordh.net/resource/letter/KYVMPFLS/exchange/KN3GRKXF/sending/NT2JTQVC> a crm:E7_Activity ;
+<http://dpub.cordh.net/resource/letter/8ESY2ZWK/exchange/SM76Z58G/sending/9PHK6X5N> a crm:E7_Activity ;
     rdfs:label "Sending"^^xsd:string ;
-    crm:P16_used_specific_object <dpub.cordh.net/resource/letter/KYVMPFLS> ;
-    crm:P4_has_time_span <dpub.cordh.net/resource/letter/KYVMPFLS/exchange/KN3GRKXF/sending/NT2JTQVC/timespan/AYECYTPK> ;
-    crm:P9i_forms_part_of <dpub.cordh.net/resource/letter/KYVMPFLS/exchange/KN3GRKXF> .
+    crm:P16_used_specific_object <http://dpub.cordh.net/resource/letter/8ESY2ZWK> ;
+    crm:P4_has_time_span <http://dpub.cordh.net/resource/letter/8ESY2ZWK/exchange/SM76Z58G/sending/9PHK6X5N/timespan/S3MZUK2Z> ;
+    crm:P9i_forms_part_of <http://dpub.cordh.net/resource/letter/8ESY2ZWK/exchange/SM76Z58G> .
 
-Platform:fileContainer ldp:contains <dpub.cordh.net/document/Bernard_Berenson_in_Settignano_to_Yashiro_-941331600.html> .
+Platform:fileContainer ldp:contains <http://dpub.cordh.net/document/Bernard_Berenson_in_Settignano_to_Yashiro_-941331600.html> .
 
-<dpub.cordh.net/document/Bernard_Berenson_in_Settignano_to_Yashiro_-941331600.html> a <dpub.cordh.net/annotation-schema/TextDocument>,
+<http://dpub.cordh.net/document/Bernard_Berenson_in_Settignano_to_Yashiro_-941331600.html> a <http://dpub.cordh.net/annotation-schema/TextDocument>,
         crm:E33_Linguistic_Object,
         <http://www.ics.forth.gr/isl/CRMdig/D1_Digital_Object>,
         Platform:File,
         ldp:Resource,
         prov:Entity ;
-    crm:P1_is_identified_by <dpub.cordh.net/resource/letter/KYVMPFLS> ;
-    Platform:fileContext <dpub.cordh.net/resource/TextDocuments> ;
+    crm:P1_is_identified_by <http://dpub.cordh.net/resource/letter/8ESY2ZWK> ;
+    Platform:fileContext <http://www.researchspace.org/resource/TextDocuments> ;
     Platform:fileName "Bernard_Berenson_in_Settignano_to_Yashiro_-941331600.html" ;
     Platform:mediaType "form-data" ;
-    prov:generatedAtTime "1940/03/04"^^xsd:dateTime ;
-    prov:wasAttributedTo <http://www.metaphacts.com/resource/user/admin> .
+    prov:generatedAtTime "2020-01-01T16:33:02"^^xsd:dateTime ;
+    prov:wasAttributedTo <http://www.researchspace.org/resource/user/admin> .
 
-<dpub.cordh.net/resource/letter/KYVMPFLS/exchange/KN3GRKXF/actor_as_sender> crm:P02_has_range <dpub.cordh.net/resource/person/V58F4NEK> ;
-    crm:P14.1_in_the_role_of <dpub.cordh.net/resource/role/sender> .
+<http://dpub.cordh.net/resource/letter/8ESY2ZWK/exchange/SM76Z58G/actor_as_sender> crm:P02_has_range <http://dpub.cordh.net/resource/person/FZ936EJG> ;
+    crm:P14.1_in_the_role_of <http://dpub.cordh.net/resource/role/sender> .
 
-<dpub.cordh.net/resource/person/6MRLE935> a crm:E21_Person ;
-    rdfs:label "Yashiro"^^xsd:string .
-
-<dpub.cordh.net/resource/person/V58F4NEK> a crm:E21_Person ;
+<http://dpub.cordh.net/resource/person/FZ936EJG> a crm:E21_Person ;
     rdfs:label "Bernard Berenson"^^xsd:string .
 
-<dpub.cordh.net/resource/place/4UPSFXUA> a crm:E53_Place ;
+<http://dpub.cordh.net/resource/person/NEJFH4KY> a crm:E21_Person ;
+    rdfs:label "Yashiro"^^xsd:string .
+
+<http://dpub.cordh.net/resource/place/ZN3XGAR3> a crm:E53_Place ;
     rdfs:label "Settignano"^^xsd:string .
 
-<dpub.cordh.net/resource/role/receiver> a crm:E55_Type ;
+<http://dpub.cordh.net/resource/role/receiver> a crm:E55_Type ;
     rdfs:label "Receiver"^^xsd:string .
 
-<dpub.cordh.net/resource/role/sender> a crm:E55_Type ;
+<http://dpub.cordh.net/resource/role/sender> a crm:E55_Type ;
     rdfs:label "Sender"^^xsd:string .
 
-<dpub.cordh.net/resource/letter/KYVMPFLS/exchange/KN3GRKXF> a crm:E7_Activity ;
-    crm:P16_used_specific_object <dpub.cordh.net/resource/letter/KYVMPFLS> .
+<http://dpub.cordh.net/resource/letter/8ESY2ZWK/exchange/SM76Z58G> a crm:E7_Activity ;
+    crm:P16_used_specific_object <http://dpub.cordh.net/resource/letter/8ESY2ZWK> .
 
-<dpub.cordh.net/resource/letter/KYVMPFLS/exchange/KN3GRKXF/sending/NT2JTQVC/timespan/AYECYTPK> a crm:E54_Time-span ;
-    crm:P81a_end_of_the_begin "-941331600"^^xsd:dateTime ;
-    crm:P81b_begin_of_the_end "-941331600"^^xsd:dateTime .
+<http://dpub.cordh.net/resource/letter/8ESY2ZWK/exchange/SM76Z58G/sending/9PHK6X5N/timespan/S3MZUK2Z> a crm:E54_Time-span .
 
-<dpub.cordh.net/resource/letter/KYVMPFLS> a crm:E22_Man-made_Object .
+<http://dpub.cordh.net/resource/letter/8ESY2ZWK> a crm:E22_Man-made_Object .
 
