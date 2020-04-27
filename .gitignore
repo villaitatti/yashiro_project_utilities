@@ -1,3 +1,6 @@
 *.pyc
 .vscode/*
 .idea/
+*.sh
+data/
+metadata/

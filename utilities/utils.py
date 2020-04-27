@@ -26,10 +26,9 @@ key_sending_date = 'sending_date'
 
 key_filename = 'filename'
 
-date_format = '%Y/%m/%d'
-
 extension_html = 'html'
 extension_ttl = 'ttl'
+extension_rdf = 'rdf'
 
 key_actors = 'actor'
 key_places = 'places'
@@ -38,6 +37,10 @@ URI = {
     key_actors: {},
     key_places: {}
 }
+
+timestring = "%Y/%D/%mT%H:%M:%S.%Z"
+
+people = {}
 
 BASE_URI = 'http://yashiro.itatti.harvard.edu/'
 
@@ -109,7 +112,7 @@ def _parse_title(title):
 def _parse_date(date):
     
     # todo: timezone
-    return datetime.fromtimestamp(date).strftime(date_format)
+    return datetime.fromtimestamp(date).strftime(timestring)
 
 def _create_RDF(base_uri, metadata):
 
@@ -122,7 +125,7 @@ def _create_RDF(base_uri, metadata):
     CRM = Namespace('http://www.cidoc-crm.org/cidoc-crm/')
     CRM_NAME = 'crm'
 
-    DPUB_ANNOTATION = Namespace(f'{base_uri}/annotation-schema/')
+    DPUB_ANNOTATION = Namespace(base_uri+"/annotation-schema/")
     CRMDIG = Namespace('http://www.ics.forth.gr/isl/CRMdig/')
 
     LDP = Namespace('http://www.w3.org/ns/ldp#')
@@ -131,12 +134,12 @@ def _create_RDF(base_uri, metadata):
     PROV = Namespace('http://www.w3.org/ns/prov#')
     PROV_NAME = 'prov'
 
-    BASE = Namespace(f'{base_uri}/resource/')
+    BASE = Namespace('http://www.researchspace.org/resource/')
 
     PLATFORM = Namespace('http://www.metaphacts.com/ontologies/platform#')
     PLATFORM_NAME = 'Platform'
 
-    USER = Namespace('http://www.metaphacts.com/resource/user/')
+    USER = Namespace('http://www.researchspace.org/resource/user/')
 
     g.namespace_manager.bind(PLATFORM_NAME, PLATFORM, override = True, replace=True)
     g.namespace_manager.bind(PROV_NAME, PROV, override = True, replace=True)
@@ -156,7 +159,7 @@ def _create_RDF(base_uri, metadata):
     g.add( (BASE_NODE, PLATFORM.fileContext, BASE.TextDocuments) )
     g.add( (BASE_NODE, PLATFORM.fileName, Literal(metadata[key_filename])) )
     g.add( (BASE_NODE, PLATFORM.mediaType, Literal('form-data')) )
-    g.add( (BASE_NODE, PROV.generatedAtTime, Literal(metadata[key_sending_date], datatype=XSD.dateTime)) )
+    g.add( (BASE_NODE, PROV.generatedAtTime, Literal(datetime.now().strftime(timestring), datatype=XSD.dateTime)) )
     g.add( (BASE_NODE, PROV.wasAttributedTo, USER.admin) )
 
     g.add( (PLATFORM.fileContainer , URIRef('http://www.w3.org/ns/ldp#contains'), BASE_NODE) )
@@ -171,6 +174,14 @@ def _create_RDF(base_uri, metadata):
     g.add( (LETTER, RDF.type, CRM['E22_Man-made_Object']) )
     g.add( (BASE_NODE, CRM.P1_is_identified_by, LETTER) )
 
+    # Title
+    letter_title_uri = f'{letter_uri}/title/{_id_generator()}'
+    LETTER_TITLE = URIRef(letter_title_uri)
+
+    g.add( (LETTER, CRM.P48_has_preferred_identifier, LETTER_TITLE) )
+    g.add( (LETTER_TITLE, RDF.type, CRM.E42_Identifier) )
+    g.add( (LETTER_TITLE, RDFS.label, Literal(metadata[key_title], datatype=XSD.string)) )
+
     # Activity exchange
     activity_exchange_id = _id_generator()
     activity_exchange_uri = f'{letter_uri}/exchange/{activity_exchange_id}'
@@ -183,9 +194,13 @@ def _create_RDF(base_uri, metadata):
     actor_as_sender_uri = f'{activity_exchange_uri}/actor_as_sender'
     ACTOR_AS_SENDER = URIRef(actor_as_sender_uri)
 
+    g.add( (ACTIVITY_EXCHANGE, CRM.P01_has_domain, ACTOR_AS_SENDER))
+
     # Actor as receiver (?)
     actor_as_receiver_uri = f'{activity_exchange_uri}/actor_as_receiver'
     ACTOR_AS_RECEIVER = URIRef(actor_as_receiver_uri) 
+
+    g.add( (ACTIVITY_EXCHANGE, CRM.P01_has_domain, ACTOR_AS_RECEIVER)) 
 
     # Sender role
     sender_role_uri = f'{base_uri}role/sender'
@@ -283,8 +298,8 @@ def _create_RDF(base_uri, metadata):
     g.add( (PRODUCTION, CRM.P4_has_time_span, SENDING_TIMESPAN))
     g.add( (SENDING, CRM.P4_has_time_span, SENDING_TIMESPAN))
 
-    g.add( (SENDING_TIMESPAN, CRM.P81a_end_of_the_begin, Literal(metadata[key_date], datatype=XSD.dateTime)) )
-    g.add( (SENDING_TIMESPAN, CRM.P81b_begin_of_the_end, Literal(metadata[key_date], datatype=XSD.dateTime)) )
+    g.add( (SENDING_TIMESPAN, CRM.P81a_end_of_the_begin, Literal(datetime.fromtimestamp(metadata[key_date]).strftime(timestring), datatype=XSD.dateTime)) )
+    g.add( (SENDING_TIMESPAN, CRM.P81b_begin_of_the_end, Literal(datetime.fromtimestamp(metadata[key_date]).strftime(timestring), datatype=XSD.dateTime)) )
 
     """
     # Timespan start
@@ -341,6 +356,8 @@ def extract(filename, directory):
 
 def tag(uri, input_metadata, directory):
 
+    uri = f'http://{uri}'
+
     extracted_metadata = []
 
     for letter in input_metadata:
@@ -360,21 +377,20 @@ def _del(filename, url, f):
 
     delete = requests.delete(
         url,
-        headers = {'Content-Type':'text/turtle'},
+        #headers = {'Content-Type':'text/turtle'},
         auth = requests.auth.HTTPBasicAuth(username, password)
     )
-    print(delete.raw)
+
     return f'DEL\t{filename}\t{delete}'
 
-def _put(filename, url, f):
+def _post(filename, url, f):
 
-    post = requests.put(
+    post = requests.post(
         url = url, 
         headers = {'Content-Type':'text/turtle'},
         auth = requests.auth.HTTPBasicAuth(username, password),
         data = f.read()) 
 
-    print(post)
     return f'PUT\t{filename}\t{post}'
 
 def post(uri, directory, n=1):
@@ -388,19 +404,20 @@ def post(uri, directory, n=1):
 
         with open(os.path.join(directory,metadata_file), 'rb') as f:
 
-            filename = metadata_file.split('.')[0]
+            filenames = metadata_file.split('.')
+            filename = f'{filenames[0]}.{filenames[1]}'
             graph_name = urllib.parse.quote(f'http://{uri}/document/{filename}/context', safe='')
-            url = f'http://127.0.0.1:10214/rdf-graph-store?graph={graph_name}'
+            r_url = f'http://127.0.0.1:10214/rdf-graph-store?graph={graph_name}'
 
-            print(url)
+            print(r_url)
 
             print('\n')
 
             #DEL
-            print(_del(filename, url, f))
+            print(_del(filename, r_url, f))
 
             #PUT
-            print(_put(filename, url, f))
+            print(_post(filename, r_url, f))
 
             f.close()
 
