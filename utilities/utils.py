@@ -16,6 +16,7 @@ password = 'admin'
 key_date = 'created'
 key_title = 'title'
 key_body = 'body_value'
+key_body_text = 'body_text'
 
 key_production_place = 'production_place'
 key_receiving_place = 'receiving_place'
@@ -170,6 +171,15 @@ def _create_RDF(base_uri, metadata):
 
     g.add( (LETTER, RDF.type, CRM['E22_Man-made_Object']) )
     g.add( (BASE_NODE, CRM.P1_is_identified_by, LETTER) )
+
+    #Letter Content
+    letter_content_id = _id_generator()
+    letter_content_uri = f'{letter_uri}/content/{letter_content_id}'
+    LETTER_CONTENT = URIRef(letter_content_uri)
+    g.add((LETTER_CONTENT, RDF.type, CRM['E90_Symbolic_Object']))
+    g.add((LETTER, CRM.P128_carries, LETTER_CONTENT))
+    #TODO: choose appropriate property in the place of RDFS.label
+    g.add((LETTER_CONTENT, RDFS.label, (Literal(metadata[key_body_text], datatype=XSD.string))))
 
     # Activity exchange
     activity_exchange_id = _id_generator()
@@ -326,13 +336,15 @@ def extract(filename, directory):
 
             filename = f'{_manipulate_title(title)}_{date}.{extension_html}'
             file_body = _clean_body(body)
+            body_text = file_body.get_text(separator="\n")
 
             _write_letter_html(filename, content=file_body, directory=directory)
 
             extracted_data.append({
                 key_filename: filename,
                 key_title: title,
-                key_date: date
+                key_date: date,
+                key_body_text: body_text
             })
 
         f.close()
