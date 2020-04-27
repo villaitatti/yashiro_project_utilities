@@ -10,8 +10,8 @@ from datetime import datetime
 from rdflib import Graph, URIRef, namespace, Namespace, Literal
 from bs4 import BeautifulSoup as bs
 
-username = 'admin'
-password = 'admin'
+tmp1 = 'admin'
+tmp2 = 'admin'
 
 key_date = 'created'
 key_title = 'title'
@@ -373,25 +373,22 @@ def tag(uri, input_metadata, directory):
 
     return extracted_metadata
 
-def _del(filename, url, f):
+def _del(filename, url):
 
-    delete = requests.delete(
-        url,
-        #headers = {'Content-Type':'text/turtle'},
-        auth = requests.auth.HTTPBasicAuth(username, password)
-    )
+    # curl -v -u admin:admin -X DELETE -H 'Content-Type: text/turtle' http://127.0.0.1:10214/rdf-graph-store?graph=http%3A%2F%2Fdpub.cordh.net%2Fdocument%2FBernard_Berenson_in_Consuma_to_Yashiro_-1149037200.html%2Fcontext
 
-    return f'DEL\t{filename}\t{delete}'
+    command = f'curl -u {tmp1}:{tmp2} -X DELETE -H \'Content-Type: text/turtle\' {url}'
 
-def _post(filename, url, f):
+    return f'DEL\t{os.system(command)}'
 
-    post = requests.post(
-        url = url, 
-        headers = {'Content-Type':'text/turtle'},
-        auth = requests.auth.HTTPBasicAuth(username, password),
-        data = f.read()) 
+def _post(filename, url):
 
-    return f'PUT\t{filename}\t{post}'
+    #curl -v -u admin:admin -X POST -H 'Content-Type: text/turtle' --data-binary '@metadata/Bernard_Berenson_in_Consuma_to_Yashiro_-1149037200.html.ttl' http://127.0.0.1:10214/rdf-graph-store?graph=http%3A%2F%2Fdpub.cordh.net%2Fdocument%2FBernard_Berenson_in_Consuma_to_Yashiro_-1149037200.html%2Fcontext
+
+    filename = os.path.join('metadata',filename)
+    command = f'curl -u {tmp1}:{tmp2} -X POST -H \'Content-Type: text/turtle\' --data-binary \'@{filename}.{extension_ttl}\' {url}'
+
+    return f'POST\t{os.system(command)}'
 
 def post(uri, directory, n=1):
 
@@ -402,23 +399,17 @@ def post(uri, directory, n=1):
         if i == n:
             return
 
-        with open(os.path.join(directory,metadata_file), 'rb') as f:
+        filenames = metadata_file.split('.')
+        filename = f'{filenames[0]}.{filenames[1]}'
+        graph_name = urllib.parse.quote(f'http://{uri}/document/{filename}/context', safe='')
+        r_url = f'http://127.0.0.1:10214/rdf-graph-store?graph={graph_name}'
 
-            filenames = metadata_file.split('.')
-            filename = f'{filenames[0]}.{filenames[1]}'
-            graph_name = urllib.parse.quote(f'http://{uri}/document/{filename}/context', safe='')
-            r_url = f'http://127.0.0.1:10214/rdf-graph-store?graph={graph_name}'
+        print(f'\n{filename}')
 
-            print(r_url)
+        #DEL
+        print(_del(filename, r_url))
 
-            print('\n')
-
-            #DEL
-            print(_del(filename, r_url, f))
-
-            #PUT
-            print(_post(filename, r_url, f))
-
-            f.close()
+        #PUT
+        print(_post(filename, r_url))
 
         i+=1
