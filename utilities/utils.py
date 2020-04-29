@@ -45,6 +45,9 @@ people = {}
 
 BASE_URI = 'http://yashiro.itatti.harvard.edu/'
 
+
+people = {}
+
 def _id_generator(stringLength=8):
 
     chars = string.ascii_uppercase + string.digits
@@ -114,6 +117,16 @@ def _parse_date(date):
     
     # todo: timezone
     return datetime.fromtimestamp(date).strftime(timestring)
+
+def _create_person_id(name):
+
+    if name in people:
+        return people[name]
+
+    pid = _id_generator()
+    people[name] = pid
+
+    return pid
 
 def _create_RDF(base_uri, metadata):
 
@@ -233,14 +246,7 @@ def _create_RDF(base_uri, metadata):
 
     # Sender person
 
-    # Create new ID for the person and keep track
-    try:
-        sender_id = URI[key_actors][key_sender] 
-    except:
-        sender_id = _id_generator()
-        URI[key_actors][metadata[key_sender]] = sender_id
-
-    sender_uri = f'{base_uri}person/{sender_id}'
+    sender_uri = f'{base_uri}person/{_create_person_id(metadata[key_sender])}'
     SENDER = URIRef(sender_uri)
 
     g.add( (SENDER, RDF.type, CRM.E21_Person) )
@@ -248,14 +254,7 @@ def _create_RDF(base_uri, metadata):
 
     g.add( (ACTOR_AS_SENDER, CRM.P02_has_range, SENDER) )
 
-    # Receiver person
-    try:
-        receiver_id = URI[key_actors][key_sender] 
-    except:
-        receiver_id = _id_generator()
-        URI[key_actors][metadata[key_sender]] = sender_id
-
-    receiver_uri = f'{base_uri}person/{receiver_id}'
+    receiver_uri = f'{base_uri}person/{_create_person_id(metadata[key_receiver])}'
     RECEIVER = URIRef(receiver_uri)
 
     g.add( (RECEIVER, RDF.type, CRM.E21_Person) )
