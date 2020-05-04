@@ -42,6 +42,7 @@ URI = {
 timestring = "%Y/%D/%mT%H:%M:%S.%Z"
 
 people = {}
+places = {}
 
 BASE_URI = 'http://yashiro.itatti.harvard.edu/'
 
@@ -125,6 +126,16 @@ def _create_person_id(name):
 
     pid = _id_generator()
     people[name] = pid
+
+    return pid
+
+def _create_place_id(name):
+
+    if name in places:
+        return places[name]
+
+    pid = _id_generator()
+    places[name] = pid
 
     return pid
 
@@ -273,14 +284,7 @@ def _create_RDF(base_uri, metadata):
     g.add( (PRODUCTION, CRM.P01_has_domain, ACTOR_AS_SENDER) )
     g.add( (PRODUCTION, CRM.P108_has_produced, LETTER) )
 
-    # Production place
-    try:
-        production_place_id = URI[key_places][key_production_place] 
-    except:
-        production_place_id = _id_generator()
-        URI[key_places][metadata[key_production_place]] = production_place_id
-
-    production_place_uri = f'{base_uri}place/{production_place_id}'
+    production_place_uri = f'{base_uri}place/{_create_place_id(metadata[key_production_place])}'
     PRODUCTION_PLACE = URIRef(production_place_uri)
 
     g.add( (PRODUCTION_PLACE, RDF.type, CRM.E53_Place) )
@@ -370,8 +374,6 @@ def tag(uri, input_metadata, directory):
 
     uri = f'http://{uri}'
 
-    extracted_metadata = []
-
     for letter in input_metadata:
 
         for key, metadatum in _parse_title(letter[key_title]).items():
@@ -383,8 +385,6 @@ def tag(uri, input_metadata, directory):
 
         _write_RDF(f'{letter[key_filename]}.{extension_ttl}', data, directory)
 
-    return extracted_metadata
-
 def _del(filename, url):
 
     # curl -v -u admin:admin -X DELETE -H 'Content-Type: text/turtle' http://127.0.0.1:10214/rdf-graph-store?graph=http%3A%2F%2Fdpub.cordh.net%2Fdocument%2FBernard_Berenson_in_Consuma_to_Yashiro_-1149037200.html%2Fcontext
@@ -393,16 +393,16 @@ def _del(filename, url):
 
     return f'DEL\t{os.system(command)}'
 
-def _post(filename, url):
+def _post(filename, url, directory):
 
     #curl -v -u admin:admin -X POST -H 'Content-Type: text/turtle' --data-binary '@metadata/Bernard_Berenson_in_Consuma_to_Yashiro_-1149037200.html.ttl' http://127.0.0.1:10214/rdf-graph-store?graph=http%3A%2F%2Fdpub.cordh.net%2Fdocument%2FBernard_Berenson_in_Consuma_to_Yashiro_-1149037200.html%2Fcontext
 
-    filename = os.path.join('metadata',filename)
+    filename = os.path.join(directory,filename)
     command = f'curl -u {tmp1}:{tmp2} -X POST -H \'Content-Type: text/turtle\' --data-binary \'@{filename}.{extension_ttl}\' {url}'
 
     return f'POST\t{os.system(command)}'
 
-def post(uri, directory, n=1):
+def post(uri, directory, n=115):
 
     i = 0
 
@@ -414,6 +414,8 @@ def post(uri, directory, n=1):
         filenames = metadata_file.split('.')
         filename = f'{filenames[0]}.{filenames[1]}'
         graph_name = urllib.parse.quote(f'http://{uri}/document/{filename}/context', safe='')
+        
+        #r_url = f'https://collection.itatti.harvard.edu/rdf-graph-store?graph={graph_name}'
         r_url = f'http://127.0.0.1:10214/rdf-graph-store?graph={graph_name}'
 
         print(f'\n{filename}')
@@ -422,6 +424,6 @@ def post(uri, directory, n=1):
         print(_del(filename, r_url))
 
         #PUT
-        print(_post(filename, r_url))
+        print(_post(filename, r_url, directory))
 
         i+=1

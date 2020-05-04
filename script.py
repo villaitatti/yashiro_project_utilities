@@ -1,18 +1,35 @@
-from utilities import utils as ut
+from letters import utils as letter_ut
+from people import utils as people_ut
 import os
 
-DB = 'letters.json'
-URI = 'dpub.cordh.net'
+def do_letters():
+    DB = 'letters'
+    URI = 'dpub.cordh.net'
 
-DIR_data = os.path.join(os.path.abspath('.'),'data')
-DIR_metadata = os.path.join(os.path.abspath('.'),'metadata')
+    DIR_data = os.path.join(os.path.abspath('.'),DB ,'data')
+    DIR_metadata = os.path.join(os.path.abspath('.'),DB ,'metadata')
+    FILENAME = os.path.join(os.path.abspath('.'),'dbs',f'{DB}.json')
 
-FILENAME = os.path.join(os.path.abspath('.'),'dbs',DB)
+    # Extract data and write
+    data = letter_ut.extract(FILENAME, directory=DIR_data)
 
-# Extract data and write
-data = ut.extract(FILENAME, directory=DIR_data)
+    metadata = letter_ut.tag(URI, data, directory=DIR_metadata)
 
-metadata = ut.tag(URI, data, directory=DIR_metadata)
+    # The server must be on!
+    request = letter_ut.post(URI, directory=DIR_metadata,n=1)
 
-# The server must be on!
-request = ut.post(URI, directory=DIR_metadata)
+def do_people():
+    DB = 'people'
+    URI = 'collection.itatti.harvard.edu'
+
+    DIR_data = os.path.join(os.path.abspath('.'),DB, 'data')
+    DIR_metadata = os.path.join(os.path.abspath('.'),DB,'metadata')
+
+    FILENAME = os.path.join(os.path.abspath('.'),'dbs',f'{DB}.json')
+
+    people_ut.tag(FILENAME, URI, directory=DIR_metadata)
+
+    people_ut.post(URI,directory=DIR_metadata)
+
+do_letters()
+#do_people()

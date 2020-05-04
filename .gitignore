@@ -2,5 +2,7 @@
 .vscode/*
 .idea/
 *.sh
+*/data/*
 data/*
+*/metadata/*
 metadata/*
