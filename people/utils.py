@@ -41,6 +41,8 @@ def _create_person_id(name):
 
 def _create_RDF(base_uri, _id, _name):
 
+    _name = _name.replace('_',' ')
+
     g = Graph()
 
     RDF = namespace.RDF
@@ -64,7 +66,7 @@ def _create_RDF(base_uri, _id, _name):
     actor_name_node = URIRef(actor_name_uri)
     actor_name_type_node = URIRef(actor_name_type_uri)
 
-    g.add( (actor_node, RDF.type, CRM.E21_Actor) )
+    g.add( (actor_node, RDF.type, CRM.E21_Person) )
     g.add( (actor_node, CRM.P1_is_identified_by, actor_name_node) )
 
     g.add( (actor_name_node, RDF.type, CRM.E41_Appellation) )
@@ -117,11 +119,17 @@ def _post(filename, url, directory):
 
     return f'POST\t{os.system(command)}'
 
-def post(uri, directory):
+def post(uri, directory, n=200):
+
+    i=0
 
     for metadata_file in os.listdir(directory):
 
+        if i == n:
+            break
+
         filename = metadata_file
+
         graph_name = urllib.parse.quote(f'http://{uri}/resource/{filename}/context', safe='')
         
         r_url = f'http://127.0.0.1:10214/rdf-graph-store?graph={graph_name}'
@@ -133,3 +141,5 @@ def post(uri, directory):
 
         #PUT
         print(_post(filename, r_url, directory))
+
+        i+=1

@@ -31,5 +31,5 @@ def do_people():
 
     people_ut.post(URI,directory=DIR_metadata)
 
-do_letters()
-#do_people()
+#do_letters()
+do_people()
