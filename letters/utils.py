@@ -6,6 +6,7 @@ import string
 import requests
 import urllib
 
+from operator import itemgetter
 from datetime import datetime
 from rdflib import Graph, URIRef, namespace, Namespace, Literal
 from bs4 import BeautifulSoup as bs
@@ -17,6 +18,7 @@ key_date = 'created'
 key_title = 'title'
 key_body = 'body_value'
 key_body_text = 'body_text'
+key_id = 'id'
 
 key_production_place = 'production_place'
 key_receiving_place = 'receiving_place'
@@ -43,8 +45,6 @@ timestring = "%Y/%D/%mT%H:%M:%S.%Z"
 
 people = {}
 places = {}
-
-BASE_URI = 'http://yashiro.itatti.harvard.edu/'
 
 
 people = {}
@@ -182,7 +182,7 @@ def _create_RDF(base_uri, metadata):
     g.add( (BASE_NODE, RDF.type, LDP.Resource) )
     g.add( (BASE_NODE, RDF.type, PROV.Entity) )
     g.add( (BASE_NODE, PLATFORM.fileContext, BASE.TextDocuments) )
-    g.add( (BASE_NODE, PLATFORM.fileName, Literal(metadata[key_filename])) )
+    g.add( (BASE_NODE, PLATFORM.fileName, Literal(f'{metadata[key_filename]}.{extension_html}')) )
     g.add( (BASE_NODE, PLATFORM.mediaType, Literal('form-data')) )
     g.add( (BASE_NODE, PROV.generatedAtTime, Literal(datetime.now().strftime(timestring), datatype=XSD.dateTime)) )
     g.add( (BASE_NODE, PROV.wasAttributedTo, USER.admin) )
@@ -341,6 +341,19 @@ def _write_RDF(filename, metadata, directory):
 
     metadata.serialize(destination=f'{directory}/{filename}', format='turtle')
 
+def _update_ids(letters):
+    
+    _id = 1
+    
+    ordered_letters = sorted(letters, key=itemgetter(key_date), reverse=False)
+
+    for letter in ordered_letters:
+       letter['id'] = f'Letter_{_id:03d}' 
+       _id+=1
+
+    with open(os.path.join('dbs', 'letters_ordered.json'), 'w') as f:
+        json.dump(ordered_letters, f)
+
 def extract(filename, directory):
 
     extracted_data = []
@@ -348,19 +361,23 @@ def extract(filename, directory):
     with open(filename, 'r') as f:
         data = json.load(f)
 
+        _update_ids(data)
+
         for letter in data:
+
             date = letter[key_date]
             title = letter[key_title]
             body = letter[key_body]
+            _id = letter[key_id]
 
-            filename = f'{_manipulate_title(title)}_{date}.{extension_html}'
+            filename = f'{_id}.{extension_html}'
             file_body = _clean_body(body)
             body_text = file_body.get_text(separator="\n")
 
             _write_letter_html(filename, content=file_body, directory=directory)
 
             extracted_data.append({
-                key_filename: filename,
+                key_filename: _id,
                 key_title: title,
                 key_date: date,
                 key_body_text: body_text
@@ -372,7 +389,7 @@ def extract(filename, directory):
 
 def tag(uri, input_metadata, directory):
 
-    uri = f'http://{uri}'
+    uri = f'https://{uri}'
 
     for letter in input_metadata:
 
@@ -411,9 +428,8 @@ def post(uri, directory, n=115):
         if i == n:
             return
 
-        filenames = metadata_file.split('.')
-        filename = f'{filenames[0]}.{filenames[1]}'
-        graph_name = urllib.parse.quote(f'http://{uri}/document/{filename}/context', safe='')
+        filename = metadata_file.split('.')[0]
+        graph_name = urllib.parse.quote(f'https://{uri}/document/{filename}/context', safe='')
         
         #r_url = f'https://collection.itatti.harvard.edu/rdf-graph-store?graph={graph_name}'
         r_url = f'http://127.0.0.1:10214/rdf-graph-store?graph={graph_name}'
