@@ -61,23 +61,31 @@ def _create_RDF(base_uri, _id, _name):
     g.namespace_manager.bind(CRM_NAME, CRM, override = True, replace=True)
 
     actor_uri = f'{base_uri}/person/{_filename}'
-    actor_name_uri = f'{actor_uri}/identifier/{_id_generator()}'
-    actor_name_type_uri = f'{actor_uri}/type/{_id_generator()}'
+    actor_appellation_uri = f'{actor_uri}/appellation'
+    appellation_uri = f'{base_uri}/preferred_name'
+
+    picture_uri = f'{base_uri}/assets/images/people/{_filename}.jpg'
     
     actor_node = URIRef(actor_uri)
-    actor_name_node = URIRef(actor_name_uri)
-    actor_name_type_node = URIRef(actor_name_type_uri)
+    actor_appellation_node = URIRef(actor_appellation_uri)
+    appellation_node = URIRef(appellation_uri)
+    picture_node = URIRef(picture_uri)
 
     #g.add( (actor_node, RDF.type, YASHIRO.Person) )
     g.add( (actor_node, RDF.type, CRM.E21_Person) )
-    g.add( (actor_node, CRM.P1_is_identified_by, actor_name_node) )
+    g.add( (actor_node, CRM.P1_is_identified_by, actor_appellation_node) )
+    g.add( (actor_node, RDFS.label, Literal(_name, datatype=XSD.string)) )
 
-    g.add( (actor_name_node, RDF.type, CRM.E41_Appellation) )
-    g.add( (actor_name_node, RDFS.label, Literal(_name, datatype=XSD.string)) )
-    g.add( (actor_name_node, CRM.P2_has_type, actor_name_type_node) )
+    g.add( (actor_node, CRM.P138i_has_representation, picture_node) )
+    g.add( (picture_node, RDF.type, CRM.E36_Visual_Item) )
+    g.add( (picture_node, RDF.type, URIRef('http://www.ics.forth.gr/isl/CRMdig/D9_Data_Object')))
 
-    g.add( (actor_name_type_node, RDF.type, CRM.E55_Type) )
-    g.add( (actor_name_type_node, RDFS.label, Literal(pref_name, datatype=XSD.string)) )
+    g.add( (actor_appellation_node, RDF.type, CRM.E41_Appellation) )
+    g.add( (actor_appellation_node, RDFS.label, Literal(_name, datatype=XSD.string)) )
+    g.add( (actor_appellation_node, CRM.P2_has_type, appellation_node) )
+
+    g.add( (appellation_node, RDF.type, CRM.E55_Type) )
+    g.add( (appellation_node, RDFS.label, Literal(pref_name, datatype=XSD.string)) )
 
     return g
 
@@ -133,7 +141,7 @@ def post(uri, directory, n=200):
 
         filename = metadata_file.split('.')[0]
 
-        graph_name = urllib.parse.quote(f'http://{uri}/resource/yashiro/{filename}/context', safe='')
+        graph_name = urllib.parse.quote(f'http://{uri}/{filename}/context', safe='')
         
         r_url = f'http://127.0.0.1:10214/rdf-graph-store?graph={graph_name}'
 
