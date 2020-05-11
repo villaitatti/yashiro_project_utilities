@@ -39,7 +39,7 @@ def _create_person_id(name):
 
     return pid
 
-def _create_RDF(base_uri, _id, _name):
+def _create_RDF(base_uri, _id, _name, _data):
 
     _filename = _name.lower()
     _name = _name.replace('_',' ')
@@ -62,19 +62,34 @@ def _create_RDF(base_uri, _id, _name):
 
     actor_uri = f'{base_uri}/person/{_filename}'
     actor_appellation_uri = f'{actor_uri}/appellation'
+
     appellation_uri = f'{base_uri}/preferred_name'
+    person_subtitle_uri = f'{base_uri}/person_subtitle'
+
+    actor_documentation_uri = f'{actor_uri}/documentation/{_id_generator()}'
 
     picture_uri = f'{base_uri}/assets/images/people/{_filename}.jpg'
-    
+
+    # types
+    appellation_node = URIRef(appellation_uri)
+    person_subtitle_node = URIRef(person_subtitle_uri)
+
+    actor_documentation_node = URIRef(actor_documentation_uri)
     actor_node = URIRef(actor_uri)
     actor_appellation_node = URIRef(actor_appellation_uri)
-    appellation_node = URIRef(appellation_uri)
     picture_node = URIRef(picture_uri)
 
     #g.add( (actor_node, RDF.type, YASHIRO.Person) )
     g.add( (actor_node, RDF.type, CRM.E21_Person) )
     g.add( (actor_node, CRM.P1_is_identified_by, actor_appellation_node) )
     g.add( (actor_node, RDFS.label, Literal(_name, datatype=XSD.string)) )
+    g.add( (actor_node, CRM.P70i_is_documented_in, actor_documentation_node) )
+
+    g.add( (actor_documentation_node, RDF.type, CRM.E73_Information_Object) )
+    g.add( (actor_documentation_node, CRM.P2_has_type, person_subtitle_node) )
+
+    g.add( (person_subtitle_node, RDF.type, CRM.E55_Type) )
+    g.add( (person_subtitle_node, RDFS.label, Literal(_data, datatype=XSD.string)) )
 
     g.add( (actor_node, CRM.P138i_has_representation, picture_node) )
     g.add( (picture_node, RDF.type, CRM.E36_Visual_Item) )
@@ -96,6 +111,9 @@ def _write_RDF(filename, metadata, directory):
 
     metadata.serialize(destination=f'{directory}/{filename}', format='turtle')
 
+def _parse_data(data):
+    return data
+
 def tag(filename, uri, directory):
 
     uri = f'http://{uri}'
@@ -106,9 +124,10 @@ def tag(filename, uri, directory):
         for person in people:
 
             _name = person['title'].strip().replace(' ','_')
+            _data = _parse_data(person['data'])
             _id = _create_person_id(_name)
 
-            _rdf = _create_RDF(uri, _id, _name)
+            _rdf = _create_RDF(uri, _id, _name, _data)
 
             _write_RDF(f'{_name}.{extension_ttl}', _rdf, directory)
 
