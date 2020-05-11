@@ -56,7 +56,7 @@ def _create_RDF(base_uri, _id, _name):
     pref_name = 'Preferred Name'
 
     BASE = Namespace('http://www.researchspace.org/resource/')
-    YASHIRO = Namespace('https://collection.itatti.harvard.edu/yashiro/')
+    YASHIRO = Namespace('https://collection.itatti.harvard.edu/resource/yashiro/')
 
     g.namespace_manager.bind(CRM_NAME, CRM, override = True, replace=True)
 
@@ -68,7 +68,7 @@ def _create_RDF(base_uri, _id, _name):
     actor_name_node = URIRef(actor_name_uri)
     actor_name_type_node = URIRef(actor_name_type_uri)
 
-    g.add( (actor_node, RDF.type, YASHIRO.Person) )
+    #g.add( (actor_node, RDF.type, YASHIRO.Person) )
     g.add( (actor_node, RDF.type, CRM.E21_Person) )
     g.add( (actor_node, CRM.P1_is_identified_by, actor_name_node) )
 
@@ -133,7 +133,7 @@ def post(uri, directory, n=200):
 
         filename = metadata_file.split('.')[0]
 
-        graph_name = urllib.parse.quote(f'http://{uri}/resource/{filename}/context', safe='')
+        graph_name = urllib.parse.quote(f'http://{uri}/resource/yashiro/{filename}/context', safe='')
         
         r_url = f'http://127.0.0.1:10214/rdf-graph-store?graph={graph_name}'
 
