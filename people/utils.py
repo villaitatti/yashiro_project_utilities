@@ -54,6 +54,7 @@ def _create_RDF(base_uri, _id, _name, _data):
     CRM_NAME = 'crm'
 
     pref_name = 'Preferred Name'
+    pers_subtitle = 'Person Subtitle'
 
     BASE = Namespace('http://www.researchspace.org/resource/')
     YASHIRO = Namespace('https://collection.itatti.harvard.edu/resource/yashiro/')
@@ -86,17 +87,17 @@ def _create_RDF(base_uri, _id, _name, _data):
     g.add( (actor_node, CRM.P70i_is_documented_in, actor_documentation_node) )
 
     g.add( (actor_documentation_node, RDF.type, CRM.E73_Information_Object) )
+    g.add( (actor_documentation_node, RDF.value, Literal(_data, datatype=XSD.string)) )
     g.add( (actor_documentation_node, CRM.P2_has_type, person_subtitle_node) )
 
     g.add( (person_subtitle_node, RDF.type, CRM.E55_Type) )
-    g.add( (person_subtitle_node, RDFS.label, Literal(_data, datatype=XSD.string)) )
+    g.add( (person_subtitle_node, RDFS.label, Literal(pers_subtitle, datatype=XSD.string)) )
 
     g.add( (actor_node, CRM.P138i_has_representation, picture_node) )
     g.add( (picture_node, RDF.type, CRM.E36_Visual_Item) )
     g.add( (picture_node, RDF.type, URIRef('http://www.ics.forth.gr/isl/CRMdig/D9_Data_Object')))
 
     g.add( (actor_appellation_node, RDF.type, CRM.E41_Appellation) )
-    g.add( (actor_appellation_node, RDFS.label, Literal(_name, datatype=XSD.string)) )
     g.add( (actor_appellation_node, CRM.P2_has_type, appellation_node) )
 
     g.add( (appellation_node, RDF.type, CRM.E55_Type) )
