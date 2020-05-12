@@ -186,6 +186,7 @@ def _create_RDF(base_uri, metadata):
     g.add( (BASE_NODE, PLATFORM.mediaType, Literal('form-data')) )
     g.add( (BASE_NODE, PROV.generatedAtTime, Literal(datetime.now().strftime(timestring), datatype=XSD.dateTime)) )
     g.add( (BASE_NODE, PROV.wasAttributedTo, USER.admin) )
+    g.add( (BASE_NODE, RDFS.label, Literal(metadata[key_filename], datatype=XSD.string)) )
 
     g.add( (PLATFORM.fileContainer , URIRef('http://www.w3.org/ns/ldp#contains'), BASE_NODE) )
     
