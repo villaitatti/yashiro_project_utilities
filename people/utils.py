@@ -56,6 +56,8 @@ def _create_RDF(base_uri, _id, _name, _data):
     pref_name = 'Preferred Name'
     pers_subtitle = 'Person Subtitle'
 
+    collection_base = 'https://collection.itatti.harvard.edu'
+
     BASE = Namespace('http://www.researchspace.org/resource/')
     YASHIRO = Namespace('https://collection.itatti.harvard.edu/resource/yashiro/')
 
@@ -69,7 +71,7 @@ def _create_RDF(base_uri, _id, _name, _data):
 
     actor_documentation_uri = f'{actor_uri}/documentation/{_id_generator()}'
 
-    picture_uri = f'{base_uri}/assets/images/people/{_filename}.jpg'
+    picture_uri = f'{collection_base}/images/people/{_filename}.jpg'
 
     # types
     appellation_node = URIRef(appellation_uri)
@@ -98,6 +100,7 @@ def _create_RDF(base_uri, _id, _name, _data):
     g.add( (picture_node, RDF.type, URIRef('http://www.ics.forth.gr/isl/CRMdig/D9_Data_Object')))
 
     g.add( (actor_appellation_node, RDF.type, CRM.E41_Appellation) )
+    g.add( (actor_appellation_node, RDFS.label, Literal(_name, datatype=XSD.string)) )
     g.add( (actor_appellation_node, CRM.P2_has_type, appellation_node) )
 
     g.add( (appellation_node, RDF.type, CRM.E55_Type) )
@@ -117,7 +120,7 @@ def _parse_data(data):
 
 def tag(filename, uri, directory):
 
-    uri = f'http://{uri}'
+    uri = f'https://{uri}'
 
     with open(filename, 'r') as f:
         people = json.load(f)
@@ -125,13 +128,12 @@ def tag(filename, uri, directory):
         for person in people:
 
             _name = person['title'].strip().replace(' ','_')
-            _data = _parse_data(person['data'])
+            _data = _parse_data(person['field_professional_title_value'])
             _id = _create_person_id(_name)
 
             _rdf = _create_RDF(uri, _id, _name, _data)
 
             _write_RDF(f'{_name}.{extension_ttl}', _rdf, directory)
-
 
 def _del(filename, url):
 
@@ -163,7 +165,7 @@ def post(uri, directory, n=200):
 
         graph_name = urllib.parse.quote(f'http://{uri}/{filename}/context', safe='')
         
-        r_url = f'http://127.0.0.1:10214/rdf-graph-store?graph={graph_name}'
+        r_url = f'https://collection.itatti.harvard.edu/rdf-graph-store?graph={graph_name}'
 
         print(f'\n{filename}')
 
