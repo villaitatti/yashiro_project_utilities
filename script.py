@@ -4,7 +4,7 @@ import os
 
 def do_letters():
     DB = 'letters'
-    URI = 'collection.itatti.harvard.edu/yashiro'
+    URI = 'collection.itatti.harvard.edu/resource/yashiro'
 
     DIR_data = os.path.join(os.path.abspath('.'),DB ,'data')
     DIR_metadata = os.path.join(os.path.abspath('.'),DB ,'metadata')
@@ -16,11 +16,11 @@ def do_letters():
     metadata = letter_ut.tag(URI, data, directory=DIR_metadata)
 
     # The server must be on!
-    request = letter_ut.post(URI, directory=DIR_metadata, n=1)
+    request = letter_ut.post(URI, directory=DIR_metadata, n=1, POST=True)
 
 def do_people():
     DB = 'people'
-    URI = 'collection.itatti.harvard.edu'
+    URI = 'collection.itatti.harvard.edu/resource/yashiro'
 
     DIR_data = os.path.join(os.path.abspath('.'),DB, 'data')
     DIR_metadata = os.path.join(os.path.abspath('.'),DB,'metadata')
@@ -29,7 +29,7 @@ def do_people():
 
     people_ut.tag(FILENAME, URI, directory=DIR_metadata)
 
-    people_ut.post(URI,directory=DIR_metadata, n=1)
+    people_ut.post(URI,directory=DIR_metadata)
 
-#do_letters()
-do_people()
+do_letters()
+#do_people()

@@ -41,7 +41,7 @@ URI = {
     key_places: {}
 }
 
-timestring = "%Y/%D/%mT%H:%M:%S.%Z"
+timestring = "%Y-%m-%dT%H:%M:%S"
 
 people = {}
 places = {}
@@ -124,7 +124,13 @@ def _create_person_id(name):
     if name in people:
         return people[name]
 
-    pid = _id_generator()
+    pid = name.lower()
+    pid = pid.replace(' ','_')
+
+    # Custom transformation
+    if pid == 'yashiro':
+        pid = 'yukio_yashiro'
+
     people[name] = pid
 
     return pid
@@ -147,33 +153,68 @@ def _create_RDF(base_uri, metadata):
     XSD = namespace.XSD
     RDFS = namespace.RDFS
 
-    CRM = Namespace('http://www.cidoc-crm.org/cidoc-crm/')
     CRM_NAME = 'crm'
-
-    DPUB_ANNOTATION = Namespace(base_uri+"/annotation-schema/")
-    CRMDIG = Namespace('http://www.ics.forth.gr/isl/CRMdig/')
-
-    LDP = Namespace('http://www.w3.org/ns/ldp#')
     LDP_NAME = 'ldp'
-
-    PROV = Namespace('http://www.w3.org/ns/prov#')
     PROV_NAME = 'prov'
-
-    BASE = Namespace('http://www.researchspace.org/resource/')
-
-    PLATFORM = Namespace('http://www.metaphacts.com/ontologies/platform#')
     PLATFORM_NAME = 'Platform'
 
+    LDP = Namespace('http://www.w3.org/ns/ldp#')
+    PROV = Namespace('http://www.w3.org/ns/prov#')
+    CRM = Namespace('http://www.cidoc-crm.org/cidoc-crm/')
+    CRMDIG = Namespace('http://www.ics.forth.gr/isl/CRMdig/')
+    BASE = Namespace('http://www.researchspace.org/resource/')
+    DPUB_ANNOTATION = Namespace(base_uri+"/annotation-schema/")
     USER = Namespace('http://www.researchspace.org/resource/user/')
-
-    g.namespace_manager.bind(PLATFORM_NAME, PLATFORM, override = True, replace=True)
-    g.namespace_manager.bind(PROV_NAME, PROV, override = True, replace=True)
-    g.namespace_manager.bind(CRM_NAME, CRM, override = True, replace=True)
-    g.namespace_manager.bind(LDP_NAME, LDP, override=True, replace=True)
-
-    # Main node
+    PLATFORM = Namespace('http://www.metaphacts.com/ontologies/platform#')
+    
+    # URIs
     base_node_uri = f'{base_uri}/document/{metadata[key_filename]}'
+    letter_uri = f'{base_uri}/letter/{metadata[key_filename]}'
+    letter_content_uri = f'{letter_uri}/content'
+    letter_title_uri = f'{letter_uri}/title'
+    activity_exchange_uri = f'{letter_uri}/exchange'
+
+    actor_as_sender_uri = f'{activity_exchange_uri}/actor_as_sender'
+    actor_as_receiver_uri = f'{activity_exchange_uri}/actor_as_receiver'
+
+    sender_role_uri = f'{base_uri}/sender'
+    receiver_role_uri = f'{base_uri}/receiver'
+
+    sender_uri = f'{base_uri}/person/{_create_person_id(metadata[key_sender])}'
+    receiver_uri = f'{base_uri}/person/{_create_person_id(metadata[key_receiver])}'
+
+    production_uri = f'{activity_exchange_uri}/compilation'
+    production_place_uri = f'{base_uri}/place/{_create_place_id(metadata[key_production_place])}'
+
+    sending_uri = f'{activity_exchange_uri}/sending'
+    sending_timespam_uri = f'{sending_uri}/timespan/{_id_generator()}'
+
+
+    # Nodes
     BASE_NODE = URIRef(base_node_uri)
+
+    LETTER = URIRef(letter_uri)
+    LETTER_CONTENT = URIRef(letter_content_uri)
+    LETTER_TITLE = URIRef(letter_title_uri)
+
+    ACTIVITY_EXCHANGE = URIRef(activity_exchange_uri)
+
+    ACTOR_AS_SENDER = URIRef(actor_as_sender_uri)
+    ACTOR_AS_RECEIVER = URIRef(actor_as_receiver_uri) 
+
+    SENDER_ROLE = URIRef(sender_role_uri)
+    RECEIVER_ROLE = URIRef(receiver_role_uri)
+    RECEIVER = URIRef(receiver_uri)
+    SENDER = URIRef(sender_uri)
+
+    PRODUCTION = URIRef(production_uri)
+    PRODUCTION_PLACE = URIRef(production_place_uri)
+
+    SENDING = URIRef(sending_uri)
+    SENDING_TIMESPAN = URIRef(sending_timespam_uri)
+
+    # Text Document
+    g.add( (PLATFORM.fileContainer , URIRef('http://www.w3.org/ns/ldp#contains'), BASE_NODE) )
 
     g.add( (BASE_NODE, RDF.type, CRM.E33_Linguistic_Object) )
     g.add( (BASE_NODE, RDF.type, DPUB_ANNOTATION.TextDocument) )
@@ -187,151 +228,84 @@ def _create_RDF(base_uri, metadata):
     g.add( (BASE_NODE, PROV.generatedAtTime, Literal(datetime.now().strftime(timestring), datatype=XSD.dateTime)) )
     g.add( (BASE_NODE, PROV.wasAttributedTo, USER.admin) )
     g.add( (BASE_NODE, RDFS.label, Literal(metadata[key_filename], datatype=XSD.string)) )
-
-    g.add( (PLATFORM.fileContainer , URIRef('http://www.w3.org/ns/ldp#contains'), BASE_NODE) )
-    
-    base_uri = f'{base_uri}/resource/'
-    
-    # Letter
-    letter_id = _id_generator()
-    letter_uri = f'{base_uri}letter/{letter_id}'
-    LETTER = URIRef(letter_uri)
-
-    g.add( (LETTER, RDF.type, CRM['E22_Man-made_Object']) )
     g.add( (BASE_NODE, CRM.P1_is_identified_by, LETTER) )
 
-    #Letter Content
-    letter_content_id = _id_generator()
-    letter_content_uri = f'{letter_uri}/content/{letter_content_id}'
-    LETTER_CONTENT = URIRef(letter_content_uri)
+    # Letter
+    g.add( (LETTER, RDF.type, CRM['E22_Man-made_Object']) )
+    g.add( (LETTER, RDFS.label, Literal(metadata[key_filename], datatype=XSD.string)) )
+    g.add( (LETTER, CRM.P128_carries, LETTER_CONTENT) )
+    g.add( (LETTER, CRM.P48_has_preferred_identifier, LETTER_TITLE) )
 
-    g.add((LETTER_CONTENT, RDF.type, CRM['E90_Symbolic_Object']))
-    g.add((LETTER, CRM.P128_carries, LETTER_CONTENT))
+    #Letter Content
     #TODO: choose appropriate property in the place of RDFS.label
-    g.add((LETTER_CONTENT, RDFS.label, (Literal(metadata[key_body_text], datatype=XSD.string))))
+    g.add( (LETTER_CONTENT, RDF.type, CRM['E90_Symbolic_Object']) )
+    g.add( (LETTER_CONTENT, RDF.value, (Literal(metadata[key_body_text], datatype=XSD.string))) )
 
     # Title
-    letter_title_uri = f'{letter_uri}/title/{_id_generator()}'
-    LETTER_TITLE = URIRef(letter_title_uri)
-
-    g.add( (LETTER, CRM.P48_has_preferred_identifier, LETTER_TITLE) )
     g.add( (LETTER_TITLE, RDF.type, CRM.E42_Identifier) )
     g.add( (LETTER_TITLE, RDFS.label, Literal(metadata[key_title], datatype=XSD.string)) )
 
     # Activity exchange
-    activity_exchange_id = _id_generator()
-    activity_exchange_uri = f'{letter_uri}/exchange/{activity_exchange_id}'
-    ACTIVITY_EXCHANGE = URIRef(activity_exchange_uri)
-
     g.add( (ACTIVITY_EXCHANGE, RDF.type, CRM.E7_Activity) )
     g.add( (ACTIVITY_EXCHANGE, CRM.P16_used_specific_object, LETTER) )
-
-    # Actor as sender (?)
-    actor_as_sender_uri = f'{activity_exchange_uri}/actor_as_sender'
-    ACTOR_AS_SENDER = URIRef(actor_as_sender_uri)
-
     g.add( (ACTIVITY_EXCHANGE, CRM.P01_has_domain, ACTOR_AS_SENDER))
-
-    # Actor as receiver (?)
-    actor_as_receiver_uri = f'{activity_exchange_uri}/actor_as_receiver'
-    ACTOR_AS_RECEIVER = URIRef(actor_as_receiver_uri) 
-
     g.add( (ACTIVITY_EXCHANGE, CRM.P01_has_domain, ACTOR_AS_RECEIVER)) 
 
-    # Sender role
-    sender_role_uri = f'{base_uri}role/sender'
-    SENDER_ROLE = URIRef(sender_role_uri)
+    # Actor as sender (?)
+    g.add( (ACTOR_AS_SENDER, CRM['P14.1_in_the_role_of'], SENDER_ROLE) )
+    g.add( (ACTOR_AS_SENDER, CRM.P02_has_range, SENDER) )
 
+    # Actor as receiver (?)
+    g.add( (ACTOR_AS_RECEIVER, CRM['P14.1_in_the_role_of'], RECEIVER_ROLE) ) 
+    g.add( (ACTOR_AS_RECEIVER, CRM.P02_has_range, RECEIVER) )
+
+    # Sender role
     g.add( (SENDER_ROLE, RDF.type, CRM.E55_Type) )
     g.add( (SENDER_ROLE, RDFS.label, Literal('Sender',datatype=XSD.string)) )
 
-    g.add( (ACTOR_AS_SENDER, CRM['P14.1_in_the_role_of'], SENDER_ROLE) )
-
-    # Receiver role
-    receiver_role_uri = f'{base_uri}role/receiver'
-    RECEIVER_ROLE = URIRef(receiver_role_uri)
-
-    g.add( (RECEIVER_ROLE, RDF.type, CRM.E55_Type) )
-    g.add( (RECEIVER_ROLE, RDFS.label, Literal('Receiver',datatype=XSD.string)) )
-
-    g.add( (ACTOR_AS_RECEIVER, CRM['P14.1_in_the_role_of'], RECEIVER_ROLE) ) 
-
     # Sender person
-
-    sender_uri = f'{base_uri}person/{_create_person_id(metadata[key_sender])}'
-    SENDER = URIRef(sender_uri)
-
     g.add( (SENDER, RDF.type, CRM.E21_Person) )
     g.add( (SENDER, RDFS.label, Literal(metadata[key_sender], datatype=XSD.string)) )
 
-    g.add( (ACTOR_AS_SENDER, CRM.P02_has_range, SENDER) )
+    # Receiver role
+    g.add( (RECEIVER_ROLE, RDF.type, CRM.E55_Type) )
+    g.add( (RECEIVER_ROLE, RDFS.label, Literal('Receiver',datatype=XSD.string)) )
 
-    receiver_uri = f'{base_uri}person/{_create_person_id(metadata[key_receiver])}'
-    RECEIVER = URIRef(receiver_uri)
-
+    # Receiver person
     g.add( (RECEIVER, RDF.type, CRM.E21_Person) )
     g.add( (RECEIVER, RDFS.label, Literal(metadata[key_receiver], datatype=XSD.string)) )
 
-    g.add( (ACTOR_AS_RECEIVER, CRM.P02_has_range, RECEIVER) )
-
     # Production
-    production_id = _id_generator()
-    production_uri = f'{activity_exchange_uri}/compilation/{production_id}'
-    PRODUCTION = URIRef(production_uri)
-
     g.add( (PRODUCTION, RDF.type, CRM.E12_Production) )
     g.add( (PRODUCTION, RDFS.label, Literal('Compilation',datatype=XSD.string)) )
     g.add( (PRODUCTION, CRM.P9i_forms_part_of, ACTIVITY_EXCHANGE) )
     g.add( (PRODUCTION, CRM.P01_has_domain, ACTOR_AS_SENDER) )
     g.add( (PRODUCTION, CRM.P108_has_produced, LETTER) )
+    g.add( (PRODUCTION, CRM.P7_took_place_at, PRODUCTION_PLACE))
+    g.add( (PRODUCTION, CRM.P4_has_time_span, SENDING_TIMESPAN))
 
-    production_place_uri = f'{base_uri}place/{_create_place_id(metadata[key_production_place])}'
-    PRODUCTION_PLACE = URIRef(production_place_uri)
-
+    # Production place
     g.add( (PRODUCTION_PLACE, RDF.type, CRM.E53_Place) )
     g.add( (PRODUCTION_PLACE, RDFS.label, Literal(metadata[key_production_place], datatype=XSD.string)))
 
-    g.add( (PRODUCTION, CRM.P7_took_place_at, PRODUCTION_PLACE))
-
     # Sending 
-    sending_id = _id_generator()
-    sending_uri = f'{activity_exchange_uri}/sending/{sending_id}'
-    SENDING = URIRef(sending_uri)
-
     g.add( (SENDING, RDF.type, CRM.E7_Activity) )
     g.add( (SENDING, RDFS.label, Literal('Sending',datatype=XSD.string)) )
     g.add( (SENDING, CRM.P16_used_specific_object, LETTER) )
     g.add( (SENDING, CRM.P9i_forms_part_of, ACTIVITY_EXCHANGE) )
-
-    # Timespan
-    sending_timespan_id = _id_generator()
-    sending_timespam_uri = f'{sending_uri}/timespan/{sending_timespan_id}'
-    SENDING_TIMESPAN = URIRef(sending_timespam_uri)
-    
-    g.add( (SENDING_TIMESPAN, RDF.type, CRM['E54_Time-span']) )
-
-    g.add( (PRODUCTION, CRM.P4_has_time_span, SENDING_TIMESPAN))
     g.add( (SENDING, CRM.P4_has_time_span, SENDING_TIMESPAN))
 
-    g.add( (SENDING_TIMESPAN, CRM.P81a_end_of_the_begin, Literal(datetime.fromtimestamp(metadata[key_date]).strftime(timestring), datatype=XSD.dateTime)) )
-    g.add( (SENDING_TIMESPAN, CRM.P81b_begin_of_the_end, Literal(datetime.fromtimestamp(metadata[key_date]).strftime(timestring), datatype=XSD.dateTime)) )
+    # Sending timespan    
+    d = datetime.fromtimestamp(metadata[key_date]).strftime(timestring)
 
-    """
-    # Timespan start
-    sending_timespam_end_of_the_begin_uri = f'{sending_timespam_uri}/end_of_the_begin'
-    SENDING_TIMESPAN_END_OF_THE_BEGIN = URIRef(sending_timespam_end_of_the_begin_uri)
+    g.add( (SENDING_TIMESPAN, RDF.type, CRM['E54_Time-span']) )
+    g.add( (SENDING_TIMESPAN, CRM.P81a_end_of_the_begin, Literal(d, datatype=XSD.dateTime)) )
+    g.add( (SENDING_TIMESPAN, CRM.P81b_begin_of_the_end, Literal(d, datatype=XSD.dateTime)) )
 
-    g.add( (SENDING_TIMESPAN_END_OF_THE_BEGIN, RDF.type, XSD.dateTime) )
-    g.add( (SENDING_TIMESPAN_END_OF_THE_BEGIN, RDFS.label, Literal(metadata[key_date],datatype=XSD.dateTime)) )
-
-
-    # Timespan end
-    sending_timespam_begin_of_the_end_uri = f'{sending_timespam_uri}/begin_of_the_end'
-    SENDING_TIMESPAN_BEGIN_OF_THE_END = URIRef(sending_timespam_begin_of_the_end_uri)
-
-    g.add( (SENDING_TIMESPAN_BEGIN_OF_THE_END, RDF.type, XSD.dateTime) )
-    g.add( (SENDING_TIMESPAN_BEGIN_OF_THE_END, RDFS.label, Literal(metadata[key_date],datatype=XSD.dateTime)) )
-    """
+    g.namespace_manager.bind(PLATFORM_NAME, PLATFORM, override = True, replace=True)
+    g.namespace_manager.bind(PROV_NAME, PROV, override = True, replace=True)
+    g.namespace_manager.bind(CRM_NAME, CRM, override = True, replace=True)
+    g.namespace_manager.bind(LDP_NAME, LDP, override=True, replace=True)
 
     return g
 
@@ -420,7 +394,7 @@ def _post(filename, url, directory):
 
     return f'POST\t{os.system(command)}'
 
-def post(uri, directory, n=115):
+def post(uri, directory, n=115, POST=True):
 
     i = 0
 
@@ -432,8 +406,7 @@ def post(uri, directory, n=115):
         filename = metadata_file.split('.')[0]
         graph_name = urllib.parse.quote(f'https://{uri}/document/{filename}/context', safe='')
         
-        #r_url = f'https://collection.itatti.harvard.edu/rdf-graph-store?graph={graph_name}'
-        r_url = f'http://127.0.0.1:10214/rdf-graph-store?graph={graph_name}'
+        r_url = f'https://collection.itatti.harvard.edu/rdf-graph-store?graph={graph_name}'
 
         print(f'\n{filename}')
 
@@ -441,6 +414,7 @@ def post(uri, directory, n=115):
         print(_del(filename, r_url))
 
         #PUT
-        print(_post(filename, r_url, directory))
+        if POST:
+            print(_post(filename, r_url, directory))
 
         i+=1
