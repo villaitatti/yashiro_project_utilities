@@ -299,8 +299,8 @@ def _create_RDF(base_uri, metadata):
     d = datetime.fromtimestamp(metadata[key_date]).strftime(timestring)
 
     g.add( (SENDING_TIMESPAN, RDF.type, CRM['E54_Time-span']) )
-    g.add( (SENDING_TIMESPAN, CRM.P81a_end_of_the_begin, Literal(d, datatype=XSD.dateTime)) )
-    g.add( (SENDING_TIMESPAN, CRM.P81b_begin_of_the_end, Literal(d, datatype=XSD.dateTime)) )
+    g.add( (SENDING_TIMESPAN, CRM.P81a_end_of_the_begin, Literal(d, datatype=XSD.date)) )
+    g.add( (SENDING_TIMESPAN, CRM.P81b_begin_of_the_end, Literal(d, datatype=XSD.date)) )
 
     g.namespace_manager.bind(PLATFORM_NAME, PLATFORM, override = True, replace=True)
     g.namespace_manager.bind(PROV_NAME, PROV, override = True, replace=True)
