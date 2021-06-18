@@ -56,22 +56,20 @@ def _create_RDF(base_uri, _id, _name, _data):
     pref_name = 'Preferred Name'
     pers_subtitle = 'Person Subtitle'
 
-    collection_base = 'https://collection.itatti.harvard.edu'
-
     BASE = Namespace('http://www.researchspace.org/resource/')
     YASHIRO = Namespace('https://collection.itatti.harvard.edu/resource/yashiro/')
 
     g.namespace_manager.bind(CRM_NAME, CRM, override = True, replace=True)
 
-    actor_uri = f'{base_uri}/person/{_filename}'
+    actor_uri = f'{base_uri}person/{_filename}'
     actor_appellation_uri = f'{actor_uri}/appellation'
 
-    appellation_uri = f'{base_uri}/preferred_name'
-    person_subtitle_uri = f'{base_uri}/person_subtitle'
+    appellation_uri = f'{base_uri}preferred_name'
+    person_subtitle_uri = f'{base_uri}person_subtitle'
 
     actor_documentation_uri = f'{actor_uri}/documentation/{_id_generator()}'
 
-    picture_uri = f'{collection_base}/images/people/{_filename}.jpg'
+    picture_uri = f'{base_uri}images/people/{_filename}.jpg'
 
     # types
     appellation_node = URIRef(appellation_uri)
@@ -120,8 +118,6 @@ def _parse_data(data):
 
 def tag(filename, uri, directory):
 
-    uri = f'https://{uri}'
-
     with open(filename, 'r') as f:
         people = json.load(f)
 
@@ -152,20 +148,14 @@ def _post(filename, url, directory):
 
     return f'POST\t{os.system(command)}'
 
-def post(uri, directory, n=200):
-
-    i=0
+def post(endpoint, uri, directory):
 
     for metadata_file in os.listdir(directory):
 
-        if i == n:
-            break
-
         filename = metadata_file.split('.')[0]
-
-        graph_name = urllib.parse.quote(f'http://{uri}/{filename}/context', safe='')
+        graph_name = urllib.parse.quote(f'{uri}/{filename}/context', safe='')
         
-        r_url = f'https://collection.itatti.harvard.edu/rdf-graph-store?graph={graph_name}'
+        r_url = f'{endpoint}?graph={graph_name}'
 
         print(f'\n{filename}')
 
@@ -174,5 +164,3 @@ def post(uri, directory, n=200):
 
         #PUT
         print(_post(filename, r_url, directory))
-
-        i+=1

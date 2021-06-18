@@ -163,13 +163,13 @@ def _create_RDF(base_uri, metadata):
     CRM = Namespace('http://www.cidoc-crm.org/cidoc-crm/')
     CRMDIG = Namespace('http://www.ics.forth.gr/isl/CRMdig/')
     BASE = Namespace('http://www.researchspace.org/resource/')
-    DPUB_ANNOTATION = Namespace(base_uri+"/annotation-schema/")
+    DPUB_ANNOTATION = Namespace(base_uri+"annotation-schema/")
     USER = Namespace('http://www.researchspace.org/resource/user/')
-    PLATFORM = Namespace('http://www.metaphacts.com/ontologies/platform#')
+    PLATFORM = Namespace('http://www.researchspace.org/resource/system/')
     
     # URIs
-    base_node_uri = f'{base_uri}/document/{metadata[key_filename]}'
-    letter_uri = f'{base_uri}/letter/{metadata[key_filename]}'
+    base_node_uri = f'{base_uri}document/{metadata[key_filename]}'
+    letter_uri = f'{base_uri}letter/{metadata[key_filename]}'
     letter_content_uri = f'{letter_uri}/content'
     letter_title_uri = f'{letter_uri}/title'
     activity_exchange_uri = f'{letter_uri}/exchange'
@@ -177,14 +177,14 @@ def _create_RDF(base_uri, metadata):
     actor_as_sender_uri = f'{activity_exchange_uri}/actor_as_sender'
     actor_as_receiver_uri = f'{activity_exchange_uri}/actor_as_receiver'
 
-    sender_role_uri = f'{base_uri}/sender'
-    receiver_role_uri = f'{base_uri}/receiver'
+    sender_role_uri = f'{base_uri}sender'
+    receiver_role_uri = f'{base_uri}receiver'
 
-    sender_uri = f'{base_uri}/person/{_create_person_id(metadata[key_sender])}'
-    receiver_uri = f'{base_uri}/person/{_create_person_id(metadata[key_receiver])}'
+    sender_uri = f'{base_uri}person/{_create_person_id(metadata[key_sender])}'
+    receiver_uri = f'{base_uri}person/{_create_person_id(metadata[key_receiver])}'
 
     production_uri = f'{activity_exchange_uri}/compilation'
-    production_place_uri = f'{base_uri}/place/{_create_place_id(metadata[key_production_place])}'
+    production_place_uri = f'{base_uri}place/{_create_place_id(metadata[key_production_place])}'
 
     sending_uri = f'{activity_exchange_uri}/sending'
     sending_timespam_uri = f'{sending_uri}/timespan/{_id_generator()}'
@@ -364,8 +364,6 @@ def extract(filename, directory):
 
 def tag(uri, input_metadata, directory):
 
-    uri = f'https://{uri}'
-
     for letter in input_metadata:
 
         for key, metadatum in _parse_title(letter[key_title]).items():
@@ -394,19 +392,14 @@ def _post(filename, url, directory):
 
     return f'POST\t{os.system(command)}'
 
-def post(uri, directory, n=115, POST=True):
-
-    i = 0
+def post(endpoint, uri, directory):
 
     for metadata_file in os.listdir(directory):
 
-        if i == n:
-            return
-
         filename = metadata_file.split('.')[0]
-        graph_name = urllib.parse.quote(f'https://{uri}/document/{filename}/context', safe='')
+        graph_name = urllib.parse.quote(f'{uri}/document/{filename}/context', safe='')
         
-        r_url = f'https://collection.itatti.harvard.edu/rdf-graph-store?graph={graph_name}'
+        r_url = f'{endpoint}?graph={graph_name}'
 
         print(f'\n{filename}')
 
@@ -414,7 +407,5 @@ def post(uri, directory, n=115, POST=True):
         print(_del(filename, r_url))
 
         #PUT
-        if POST:
-            print(_post(filename, r_url, directory))
+        print(_post(filename, r_url, directory))
 
-        i+=1
