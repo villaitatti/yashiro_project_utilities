@@ -17,6 +17,7 @@ def _create_rdf(base_uri, _manifest, _image, _letter):
     g = Graph()
 
     RDF = namespace.RDF
+    RDFS = namespace.RDFS
 
     CRM = Namespace('http://www.cidoc-crm.org/cidoc-crm/')
     CRM_NAME = 'crm'
@@ -31,6 +32,7 @@ def _create_rdf(base_uri, _manifest, _image, _letter):
     letter_node = URIRef(letter_uri)
 
     g.add( (image_node, RDF.type, CRM.E38_Image) )
+    g.add( (image_node, RDFS.label, Literal(letter_uri, datatype=RDFS.Resource)) )
     g.add( (image_node, CRM.P165i_is_incorporated_in, letter_node) )
 
     g.add( (image_service_node, RDF.type, CRM.E73_Information_Object) )
