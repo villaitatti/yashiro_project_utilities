@@ -71,15 +71,15 @@ if __name__ == '__main__':
             data = letter_ut.extract(FILENAME, directory=DIR_DATA)
 
             letter_ut.tag(BASE_IRI, data, directory=DIR_METADATA)
-            post(ENDPOINT_URL, BASE_IRI, function, directory=DIR_METADATA, auth=auth)
+            post(ENDPOINT_URL, BASE_IRI, 'document', directory=DIR_METADATA, auth=auth)
 
         if function == "people":
             people_ut.tag(FILENAME, BASE_IRI, directory=DIR_METADATA)
-            post(ENDPOINT_URL, BASE_IRI, function, directory=DIR_METADATA, auth=auth)
+            post(ENDPOINT_URL, BASE_IRI, 'person', directory=DIR_METADATA, auth=auth)
 
         if function == "images":
             images_ut.tag(FILENAME, BASE_IRI, directory=DIR_METADATA)
-            post(ENDPOINT_URL, BASE_IRI, function, directory=DIR_METADATA, auth=auth)
+            post(ENDPOINT_URL, BASE_IRI, 'image', directory=DIR_METADATA, auth=auth)
 
 
 

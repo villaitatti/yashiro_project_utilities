@@ -69,7 +69,7 @@ def _create_RDF(base_uri, _id, _name, _data):
 
     actor_documentation_uri = f'{actor_uri}/documentation/{_id_generator()}'
 
-    picture_uri = f'{base_uri}images/people/{_filename}.jpg'
+    picture_uri = f'{base_uri}image/person/{_filename}.jpg'
 
     # types
     appellation_node = URIRef(appellation_uri)

@@ -407,5 +407,5 @@ def post(endpoint, uri, directory):
         print(_del(filename, r_url))
 
         #PUT
-        print(_post(filename, r_url, directory))
+        #print(_post(filename, r_url, directory))
 
