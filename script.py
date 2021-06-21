@@ -1,14 +1,10 @@
 from letters import utils as letter_ut
 from people import utils as people_ut
 from images import utils as images_ut
+import json
 import argparse
 import urllib
 import os
-
-auth = {
-    "user": "",
-    "pasw": ""    
-}
 
 def post(endpoint, uri, function, directory, auth):
 
@@ -44,7 +40,6 @@ def post(endpoint, uri, function, directory, auth):
         #PUT
         print(_post(filename, r_url, directory, auth))
 
-
 """
 
 USAGE: python script.py -f [letters] [people] [images] 
@@ -60,6 +55,8 @@ if __name__ == '__main__':
     BASE_IRI = 'https://yashiro.itatti.harvard.edu/resource/'
 
     ENDPOINT_URL = 'https://y.itatti.harvard.edu/rdf-graph-store'
+
+    auth = json.load(open(os.path.join(DIR_CURR, '.auth')))
 
     for function in args.functions:
 
