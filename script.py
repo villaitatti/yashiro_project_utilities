@@ -77,7 +77,3 @@ if __name__ == '__main__':
         if function == "images":
             images_ut.tag(FILENAME, BASE_IRI, directory=DIR_METADATA)
             post(ENDPOINT_URL, BASE_IRI, 'image', directory=DIR_METADATA, auth=auth)
-
-
-
-

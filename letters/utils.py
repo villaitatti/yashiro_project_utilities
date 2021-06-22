@@ -168,7 +168,7 @@ def _create_RDF(base_uri, metadata):
     PLATFORM = Namespace('http://www.researchspace.org/resource/system/')
     
 
-    filename = metadata[key_filename].lower()
+    filename = metadata[key_filename]
 
     # URIs
     base_node_uri = f'{base_uri}document/{filename}'
@@ -346,7 +346,7 @@ def extract(filename, directory):
             date = letter[key_date]
             title = letter[key_title]
             body = letter[key_body]
-            _id = letter[key_id].lower()
+            _id = letter[key_id]
 
             filename = f'{_id}.{extension_html}'
             file_body = _clean_body(body)

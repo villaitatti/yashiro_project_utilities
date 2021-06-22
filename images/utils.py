@@ -66,7 +66,7 @@ def tag(filename, uri, directory):
 
             _manifest = image['IIIF_manifest']
             _image = image['IIIF_image']
-            _letter = image['letter']
+            _letter = image['Letter-resource']
             _filename = image['filename']
 
             _rdf = _create_rdf(uri, _manifest, _image, _letter)
