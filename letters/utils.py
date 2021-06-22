@@ -167,9 +167,12 @@ def _create_RDF(base_uri, metadata):
     USER = Namespace('http://www.researchspace.org/resource/user/')
     PLATFORM = Namespace('http://www.researchspace.org/resource/system/')
     
+
+    filename = metadata[key_filename].lower()
+
     # URIs
-    base_node_uri = f'{base_uri}document/{metadata[key_filename]}'
-    letter_uri = f'{base_uri}letter/{metadata[key_filename]}'
+    base_node_uri = f'{base_uri}document/{filename}'
+    letter_uri = f'{base_uri}letter/{filename}'
     letter_content_uri = f'{letter_uri}/content'
     letter_title_uri = f'{letter_uri}/title'
     activity_exchange_uri = f'{letter_uri}/exchange'
@@ -223,16 +226,16 @@ def _create_RDF(base_uri, metadata):
     g.add( (BASE_NODE, RDF.type, LDP.Resource) )
     g.add( (BASE_NODE, RDF.type, PROV.Entity) )
     g.add( (BASE_NODE, PLATFORM.fileContext, BASE.TextDocuments) )
-    g.add( (BASE_NODE, PLATFORM.fileName, Literal(f'{metadata[key_filename]}.{extension_html}')) )
+    g.add( (BASE_NODE, PLATFORM.fileName, Literal(f'{filename}.{extension_html}')) )
     g.add( (BASE_NODE, PLATFORM.mediaType, Literal('form-data')) )
     g.add( (BASE_NODE, PROV.generatedAtTime, Literal(datetime.now().strftime(timestring), datatype=XSD.dateTime)) )
     g.add( (BASE_NODE, PROV.wasAttributedTo, USER.admin) )
-    g.add( (BASE_NODE, RDFS.label, Literal(metadata[key_filename], datatype=XSD.string)) )
+    g.add( (BASE_NODE, RDFS.label, Literal(filename, datatype=XSD.string)) )
     g.add( (BASE_NODE, CRM.P1_is_identified_by, LETTER) )
 
     # Letter
     g.add( (LETTER, RDF.type, CRM['E22_Man-made_Object']) )
-    g.add( (LETTER, RDFS.label, Literal(metadata[key_filename], datatype=XSD.string)) )
+    g.add( (LETTER, RDFS.label, Literal(filename, datatype=XSD.string)) )
     g.add( (LETTER, CRM.P128_carries, LETTER_CONTENT) )
     g.add( (LETTER, CRM.P48_has_preferred_identifier, LETTER_TITLE) )
 
@@ -343,7 +346,7 @@ def extract(filename, directory):
             date = letter[key_date]
             title = letter[key_title]
             body = letter[key_body]
-            _id = letter[key_id]
+            _id = letter[key_id].lower()
 
             filename = f'{_id}.{extension_html}'
             file_body = _clean_body(body)
