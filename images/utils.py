@@ -12,13 +12,12 @@ from bs4 import BeautifulSoup as bs
 
 timestring = "%Y/%D/%mT%H:%M:%S.%Z"
 
-def _create_rdf(base_uri, _manifest, _image, _letter):
+def _create_rdf(base_uri, _manifest, _image, _resource, _filename):
 
     def _get_index(_image_uri):
         print(_image_uri.lower())
         _image_name = re.findall('(?<=letter-)(.*)(?=.jpg\/)', _image_uri.lower())[0]
         return _image_name.split('_')[-1]
-
 
     g = Graph()
 
@@ -30,23 +29,30 @@ def _create_rdf(base_uri, _manifest, _image, _letter):
     CRM_NAME = 'crm'
     g.namespace_manager.bind(CRM_NAME, CRM, override = True, replace=True)
 
-    letter_uri = f'{base_uri}letter/{_letter}'
+    _image_uri = _image
+    _image_service_uri = _manifest
+    _image_id_uri = f'{base_uri}image/{_filename}'
 
-    # types
-    image_node = URIRef(_image)
-    image_service_node = URIRef(_manifest)
-    letter_node = URIRef(letter_uri)
+    image_node = URIRef(_image_uri)
+    image_service_node = URIRef(_image_service_uri)
+    letter_node = URIRef(_resource)
+    image_id_node = URIRef(_image_id_uri)
 
     _index = _get_index(_image)
 
     g.add( (image_node, RDF.type, CRM.E38_Image) )
-    g.add( (image_node, RDFS.label, Literal(letter_uri, datatype=RDFS.Resource)) )
+    g.add( (image_node, RDF.type, URIRef("http://www.researchspace.org/ontology/EX_Digital_Image")) )
+    g.add( (image_node, RDFS.label, image_id_node) )
     g.add( (image_node, CRM.P165i_is_incorporated_in, letter_node) )
-    g.add( (image_node, URIRef("https://yashiro.itatti.harvard.edu/resource/image_index"), Literal(_index, datatype=XSD.integer)) )
+    g.add( (image_node, URIRef("http://www.researchspace.org/ontology/image_index"), Literal(_index, datatype=XSD.integer)) )
+    g.add( (image_node, CRM.P1_is_identified_by, image_id_node) )
 
     g.add( (image_service_node, RDF.type, CRM.E73_Information_Object) )
     g.add( (image_service_node, CRM.P129_is_about, image_node) )
     g.add( (image_service_node, CRM.P2_has_type, URIRef("http://iiif.io/api/image")) )
+    g.add( (image_service_node, RDFS.label, Literal(_manifest, datatype=RDFS.Resource)) )
+
+    g.add( (image_id_node, RDF.type, CRM.E41_Appellation) )
 
     return g
 
@@ -66,9 +72,9 @@ def tag(filename, uri, directory):
 
             _manifest = image['IIIF_manifest']
             _image = image['IIIF_image']
-            _letter = image['Letter-resource']
+            _resource = image['resource']
             _filename = image['filename']
 
-            _rdf = _create_rdf(uri, _manifest, _image, _letter)
+            _rdf = _create_rdf(uri, _manifest, _image, _resource, _filename)
 
             _write_rdf(f'{_filename}.ttl', _rdf, directory)
