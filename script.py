@@ -41,9 +41,7 @@ def post(endpoint, uri, function, directory, auth):
         print(_post(filename, r_url, directory, auth))
 
 """
-
 USAGE: python script.py -f [letters] [people] [images] 
-
 """
 
 if __name__ == '__main__':
@@ -75,5 +73,15 @@ if __name__ == '__main__':
             post(ENDPOINT_URL, BASE_IRI, 'person', directory=DIR_METADATA, auth=auth)
 
         if function == "images":
-            images_ut.tag(FILENAME, BASE_IRI, directory=DIR_METADATA)
+
+            files = ['images1', 'images2']
+            
+            # images 1
+            FILENAME = os.path.join(DIR_CURR, 'dbs', f'{files[0]}.json')
+            images_ut.tag1(FILENAME, BASE_IRI, directory=DIR_METADATA)
+
+            #images 2
+            FILENAME = os.path.join(DIR_CURR, 'dbs', f'{files[1]}.json')
+            images_ut.tag2(FILENAME, BASE_IRI, directory=DIR_METADATA)
+
             post(ENDPOINT_URL, BASE_IRI, 'image', directory=DIR_METADATA, auth=auth)
