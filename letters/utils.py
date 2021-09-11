@@ -79,7 +79,11 @@ def _clean_body(body):
     for para in content_input.findAll('p'):
 
         if len(para.text) > 0:
-            content_output.append(para)
+
+            new_para = bs.new_tag(content_input,'p')
+            new_para.string = para.text
+
+            content_output.append(new_para)
 
     return content_output
 
@@ -184,7 +188,6 @@ def _create_RDF(base_uri, metadata):
     receiver_role_uri = f'{base_uri}receiver'
 
     sender_uri = f'{base_uri}person/{_create_person_id(metadata[key_sender])}'
-    receiver_uri = f'{base_uri}person/{_create_person_id(metadata[key_receiver])}'
 
     production_uri = f'{activity_exchange_uri}/compilation'
     production_place_uri = f'{base_uri}place/{_create_place_id(metadata[key_production_place])}'
@@ -207,7 +210,6 @@ def _create_RDF(base_uri, metadata):
 
     SENDER_ROLE = URIRef(sender_role_uri)
     RECEIVER_ROLE = URIRef(receiver_role_uri)
-    RECEIVER = URIRef(receiver_uri)
     SENDER = URIRef(sender_uri)
 
     PRODUCTION = URIRef(production_uri)
@@ -252,15 +254,11 @@ def _create_RDF(base_uri, metadata):
     g.add( (ACTIVITY_EXCHANGE, RDF.type, CRM.E7_Activity) )
     g.add( (ACTIVITY_EXCHANGE, CRM.P16_used_specific_object, LETTER) )
     g.add( (ACTIVITY_EXCHANGE, CRM.P01_has_domain, ACTOR_AS_SENDER))
-    g.add( (ACTIVITY_EXCHANGE, CRM.P01_has_domain, ACTOR_AS_RECEIVER)) 
+     
 
     # Actor as sender (?)
     g.add( (ACTOR_AS_SENDER, CRM['P14.1_in_the_role_of'], SENDER_ROLE) )
     g.add( (ACTOR_AS_SENDER, CRM.P02_has_range, SENDER) )
-
-    # Actor as receiver (?)
-    g.add( (ACTOR_AS_RECEIVER, CRM['P14.1_in_the_role_of'], RECEIVER_ROLE) ) 
-    g.add( (ACTOR_AS_RECEIVER, CRM.P02_has_range, RECEIVER) )
 
     # Sender role
     g.add( (SENDER_ROLE, RDF.type, CRM.E55_Type) )
@@ -269,14 +267,6 @@ def _create_RDF(base_uri, metadata):
     # Sender person
     g.add( (SENDER, RDF.type, CRM.E21_Person) )
     g.add( (SENDER, RDFS.label, Literal(metadata[key_sender], datatype=XSD.string)) )
-
-    # Receiver role
-    g.add( (RECEIVER_ROLE, RDF.type, CRM.E55_Type) )
-    g.add( (RECEIVER_ROLE, RDFS.label, Literal('Receiver',datatype=XSD.string)) )
-
-    # Receiver person
-    g.add( (RECEIVER, RDF.type, CRM.E21_Person) )
-    g.add( (RECEIVER, RDFS.label, Literal(metadata[key_receiver], datatype=XSD.string)) )
 
     # Production
     g.add( (PRODUCTION, RDF.type, CRM.E12_Production) )
@@ -304,6 +294,46 @@ def _create_RDF(base_uri, metadata):
     g.add( (SENDING_TIMESPAN, RDF.type, CRM['E54_Time-span']) )
     g.add( (SENDING_TIMESPAN, CRM.P81a_end_of_the_begin, Literal(d, datatype=XSD.date)) )
     g.add( (SENDING_TIMESPAN, CRM.P81b_begin_of_the_end, Literal(d, datatype=XSD.date)) )
+
+    # Get number of receivers
+    if "Bernard and Mary Berenson" in metadata[key_receiver]:
+      receivers = metadata[key_receiver]
+      for receiver in receivers.split(' and '):
+
+        if receiver == "Bernard":
+          receiver = "Bernard Berenson"
+
+        receiver_uri = f'{base_uri}person/{_create_person_id(receiver)}'
+        RECEIVER = URIRef(receiver_uri)
+
+        # Actor as receiver (?)
+        g.add( (ACTIVITY_EXCHANGE, CRM.P01_has_domain, ACTOR_AS_RECEIVER))
+        g.add( (ACTOR_AS_RECEIVER, CRM['P14.1_in_the_role_of'], RECEIVER_ROLE) ) 
+        g.add( (ACTOR_AS_RECEIVER, CRM.P02_has_range, RECEIVER) )
+        
+        # Receiver role
+        g.add( (RECEIVER_ROLE, RDF.type, CRM.E55_Type) )
+        g.add( (RECEIVER_ROLE, RDFS.label, Literal('Receiver',datatype=XSD.string)) )
+
+        # Receiver person
+        g.add( (RECEIVER, RDF.type, CRM.E21_Person) )
+        g.add( (RECEIVER, RDFS.label, Literal(receiver, datatype=XSD.string)) )
+    else:
+      receiver_uri = f'{base_uri}person/{_create_person_id(metadata[key_receiver])}'
+      RECEIVER = URIRef(receiver_uri)
+
+      # Actor as receiver (?)
+      g.add( (ACTIVITY_EXCHANGE, CRM.P01_has_domain, ACTOR_AS_RECEIVER))
+      g.add( (ACTOR_AS_RECEIVER, CRM['P14.1_in_the_role_of'], RECEIVER_ROLE) ) 
+      g.add( (ACTOR_AS_RECEIVER, CRM.P02_has_range, RECEIVER) )
+      
+      # Receiver role
+      g.add( (RECEIVER_ROLE, RDF.type, CRM.E55_Type) )
+      g.add( (RECEIVER_ROLE, RDFS.label, Literal('Receiver',datatype=XSD.string)) )
+
+      # Receiver person
+      g.add( (RECEIVER, RDF.type, CRM.E21_Person) )
+      g.add( (RECEIVER, RDFS.label, Literal(metadata[key_receiver], datatype=XSD.string)) )
 
     g.namespace_manager.bind(PLATFORM_NAME, PLATFORM, override = True, replace=True)
     g.namespace_manager.bind(PROV_NAME, PROV, override = True, replace=True)

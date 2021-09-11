@@ -14,6 +14,7 @@ def post(endpoint, uri, function, directory, auth):
 
         command = f'curl -u {auth["user"]}:{auth["pasw"]} -X DELETE -H \'Content-Type: text/turtle\' {url}'
 
+        print(command)
         return f'DEL\t{os.system(command)}'
 
     def _post(filename, url, directory, auth):
@@ -23,6 +24,7 @@ def post(endpoint, uri, function, directory, auth):
         filename = os.path.join(directory, filename)
         command = f'curl -u {auth["user"]}:{auth["pasw"]} -X POST -H \'Content-Type: text/turtle\' --data-binary \'@{filename}.ttl\' {url}'
 
+        print(command)
         return f'POST\t{os.system(command)}'
 
     for metadata_file in os.listdir(directory):
@@ -53,6 +55,7 @@ if __name__ == '__main__':
     BASE_IRI = 'https://yashiro.itatti.harvard.edu/resource/'
 
     ENDPOINT_URL = 'https://y.itatti.harvard.edu/rdf-graph-store'
+    #ENDPOINT_URL = 'http://localhost:10214/rdf-graph-store'
 
     auth = json.load(open(os.path.join(DIR_CURR, '.auth')))
 
