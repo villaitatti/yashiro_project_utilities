@@ -8,4 +8,4 @@ To run create the following file called `.env` in the root directory and update 
 ```
 To run
 
-```python3 script.py letters people images
+```python script.py -f [letters] [people] [images] ```
