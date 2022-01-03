@@ -384,6 +384,8 @@ def extract(filename, directory):
 
             _write_letter_html(filename, content=file_body, directory=directory)
 
+            #TODO add write_letter_txt method
+
             extracted_data.append({
                 key_filename: _id,
                 key_title: title,
