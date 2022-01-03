@@ -1,10 +1,60 @@
+import click
+import json
+import urllib
+import os
+
 from letters import utils as letter_ut
 from people import utils as people_ut
 from images import utils as images_ut
-import json
-import argparse
-import urllib
-import os
+
+@click.command()
+@click.option('-f', '--files', 'files', required=True, multiple=True, help="Types to iterate over")
+@click.option('-p', '--post', 'exec_post', is_flag=True, help="Execute the upload", default=False)
+
+def execute(files, exec_post):
+  DIR_CURR = os.path.abspath(os.path.curdir)
+  BASE_IRI = 'https://yashiro.itatti.harvard.edu/resource/'
+  ENDPOINT_URL = 'https://y.itatti.harvard.edu/rdf-graph-store'
+
+  auth = json.load(open(os.path.join(DIR_CURR, '.auth')))
+
+  for function in files:
+
+      DIR_DATA = os.path.join(DIR_CURR, function, 'data')
+      DIR_METADATA = os.path.join(DIR_CURR, function, 'metadata')
+      FILENAME = os.path.join(DIR_CURR, 'dbs', f'{function}.json')
+
+      if function == "letters":
+          print('Executing Letters ...')
+          data = letter_ut.extract(FILENAME, directory=DIR_DATA)
+          letter_ut.tag(BASE_IRI, data, directory=DIR_METADATA)
+
+          if exec_post:
+            print('Uploading Letters ...')
+            post(ENDPOINT_URL, BASE_IRI, 'document', directory=DIR_METADATA, auth=auth)
+
+      if function == "people":
+          print('Executing People ...')
+          people_ut.tag(FILENAME, BASE_IRI, directory=DIR_METADATA)
+
+          if exec_post:
+            print('Uploading People ...')
+            post(ENDPOINT_URL, BASE_IRI, 'person', directory=DIR_METADATA, auth=auth)
+
+      if function == "images":
+          print('Executing Images ...')
+          files = ['images1', 'images2']
+          # images 1
+          FILENAME = os.path.join(DIR_CURR, 'dbs', f'{files[0]}.json')
+          images_ut.tag1(FILENAME, BASE_IRI, directory=DIR_METADATA)
+
+          #images 2
+          FILENAME = os.path.join(DIR_CURR, 'dbs', f'{files[1]}.json')
+          images_ut.tag2(FILENAME, BASE_IRI, directory=DIR_METADATA)
+
+          if exec_post:
+            print('Uploading Images ...')
+            post(ENDPOINT_URL, BASE_IRI, 'image', directory=DIR_METADATA, auth=auth)
 
 def post(endpoint, uri, function, directory, auth):
 
@@ -43,48 +93,9 @@ def post(endpoint, uri, function, directory, auth):
         print(_post(filename, r_url, directory, auth))
 
 """
-USAGE: python script.py -f [letters] [people] [images] 
+USAGE: python script.py -f [letters] [people] [images] [-p]
 """
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-f', '--function', dest='functions', type=str, nargs='+')
-    args = parser.parse_args()
+  execute()
 
-    DIR_CURR = os.path.abspath(os.path.curdir)
-    BASE_IRI = 'https://yashiro.itatti.harvard.edu/resource/'
-
-    ENDPOINT_URL = 'https://y.itatti.harvard.edu/rdf-graph-store'
-    #ENDPOINT_URL = 'http://localhost:10214/rdf-graph-store'
-
-    auth = json.load(open(os.path.join(DIR_CURR, '.auth')))
-
-    for function in args.functions:
-
-        DIR_DATA = os.path.join(DIR_CURR, function, 'data')
-        DIR_METADATA = os.path.join(DIR_CURR, function, 'metadata')
-        FILENAME = os.path.join(DIR_CURR, 'dbs', f'{function}.json')
-
-        if function == "letters":
-            data = letter_ut.extract(FILENAME, directory=DIR_DATA)
-
-            letter_ut.tag(BASE_IRI, data, directory=DIR_METADATA)
-            post(ENDPOINT_URL, BASE_IRI, 'document', directory=DIR_METADATA, auth=auth)
-
-        if function == "people":
-            people_ut.tag(FILENAME, BASE_IRI, directory=DIR_METADATA)
-            post(ENDPOINT_URL, BASE_IRI, 'person', directory=DIR_METADATA, auth=auth)
-
-        if function == "images":
-
-            files = ['images1', 'images2']
-            
-            # images 1
-            FILENAME = os.path.join(DIR_CURR, 'dbs', f'{files[0]}.json')
-            images_ut.tag1(FILENAME, BASE_IRI, directory=DIR_METADATA)
-
-            #images 2
-            FILENAME = os.path.join(DIR_CURR, 'dbs', f'{files[1]}.json')
-            images_ut.tag2(FILENAME, BASE_IRI, directory=DIR_METADATA)
-
-            post(ENDPOINT_URL, BASE_IRI, 'image', directory=DIR_METADATA, auth=auth)
