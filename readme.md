@@ -2,8 +2,9 @@
 
 *Requirements:* [Anaconda](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#creating-an-environment-from-an-environment-yml-file).
 
-1. Create conda environment importing the ```yashiro_env.yml```
-2. Activate the env and run ```python script.py -f [letters] [people] [images] ```
+1. Create conda environment from the file: ```conda env create -f yashiro_env.yml```
+2. Activate the env 
+3. Execute ```python script.py -f [letters] [people] [images] ```
 
 You can find the output files in `[directory]/data`, where directory can be `letters`, `people`, `images`.
 
