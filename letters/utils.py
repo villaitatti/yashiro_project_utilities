@@ -30,6 +30,7 @@ key_sending_date = 'sending_date'
 key_filename = 'filename'
 
 extension_html = 'html'
+extension_txt = 'txt'
 extension_ttl = 'ttl'
 extension_rdf = 'rdf'
 
@@ -86,6 +87,11 @@ def _clean_body(body):
             content_output.append(new_para)
 
     return content_output
+
+
+def _write_letter_txt(filename, content, directory):
+  content = re.sub(r"<[^<>]+>", '\n', str(content))
+  _write_letter_html(filename, content, directory)
 
 def _write_letter_html(filename, content, directory):
 
@@ -378,13 +384,11 @@ def extract(filename, directory):
             body = letter[key_body]
             _id = letter[key_id]
 
-            filename = f'{_id}.{extension_html}'
             file_body = _clean_body(body)
             body_text = file_body.get_text(separator="\n")
 
-            _write_letter_html(filename, content=file_body, directory=directory)
-
-            #TODO add write_letter_txt method
+            _write_letter_html(f'{_id}.{extension_html}', content=file_body, directory=directory)
+            _write_letter_txt(f'{_id}.{extension_txt}', content=file_body, directory=directory)
 
             extracted_data.append({
                 key_filename: _id,
